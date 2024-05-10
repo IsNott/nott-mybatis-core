@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/db_name?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 0
+      maximum-pool-size: 20
+      idle-timeout: 10000
+      connection-test-query: select 1
+nott:
+  mybatis:
+    mapper-location: classpath*:mapper/**Mapper.xml
+
+logging:
+  config: classpath:logback.xml
+  level:
+    org.nott.mapper: debug
