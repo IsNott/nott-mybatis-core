@@ -16,5 +16,5 @@
     </appender>
 
 
-    <logger name="org.nott" level="info"/>
+    <logger name="org.nott.web" level="info"/>
 </configuration>

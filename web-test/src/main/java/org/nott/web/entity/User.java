@@ -1,4 +1,4 @@
-package org.nott.entity;
+package org.nott.web.entity;
 
 import lombok.Data;
 

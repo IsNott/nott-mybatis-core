@@ -1,6 +1,6 @@
-package org.nott.mapper;
+package org.nott.web.mapper;
 
-import org.nott.entity.User;
+import org.nott.web.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
