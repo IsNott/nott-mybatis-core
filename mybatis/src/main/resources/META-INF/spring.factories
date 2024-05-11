@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.nott.mybatis.configuration.MybatisAutoConfiguration,\
-org.nott.mybatis.configuration.DataSourceConfiguration
