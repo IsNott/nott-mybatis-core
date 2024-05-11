@@ -10,3 +10,4 @@
 ## 参考文档
 mybatis中文文档：https://mybatis.net.cn/getting-started.html
 mybatis与spring整合版本对应关系参考：https://mybatis.org/spring/
+jsqlparser:https://jsqlparser.github.io/JSqlParser/usage.html
