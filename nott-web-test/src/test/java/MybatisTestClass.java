@@ -2,11 +2,14 @@
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
+import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.List;
 
 
 /**
@@ -36,4 +39,39 @@ public class MybatisTestClass {
         User user = userMapper.selectUser(id);
         System.out.println(user);
     }
+
+    @Test
+    public void testIssues02(){
+        String email = "test";
+        email = "%" + email + "%";
+        User singleColumUser = userMapper.selectUserByEmail(email);
+        System.out.println(singleColumUser);
+    }
+
+    @Test
+    public void testIssues03(){
+        String name = "you";
+        String orderBy = "id";
+        name = "%" + name + "%";
+
+        User mutlColumUser = userMapper.selectUserByName(name, orderBy);
+        System.out.println(mutlColumUser);
+    }
+
+
+    @Test
+    public void testIssues04(){
+        User user = userMapper.selectOne(new User());
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues05(){
+        User user = userMapper.selectOneByCondition(new User(),
+                SimpleSqlConditionBuilder.create(UserMapper.class)
+                        .eq("name","youKnowWho")
+        );
+        System.out.println(user);
+    }
+
 }
