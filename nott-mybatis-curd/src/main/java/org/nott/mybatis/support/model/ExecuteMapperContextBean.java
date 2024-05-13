@@ -12,17 +12,12 @@ import java.lang.reflect.Parameter;
  */
 
 @Data
-public class ExecuteMapperContext {
+public class ExecuteMapperContextBean {
 
     /**
      * 当前mapper的class
      */
     private Class<?> currentMapperClass;
-
-    /**
-     * 当前mapper的泛型
-     */
-    private Class<?> currentGenericSuperClass;
 
     /**
      * 执行的方法

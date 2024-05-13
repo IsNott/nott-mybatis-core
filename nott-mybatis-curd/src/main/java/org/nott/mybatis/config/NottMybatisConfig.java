@@ -23,9 +23,4 @@ public class NottMybatisConfig {
 
     private String mapperLocation;
 
-    /**
-     * 需要拦截的mapper包
-     */
-    private String[] aopPackage = {""};
-
 }

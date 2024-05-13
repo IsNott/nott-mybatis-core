@@ -5,7 +5,6 @@ import org.nott.Application;
 import org.nott.mybatis.sql.model.InSelect;
 import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 import org.nott.web.entity.User;
-import org.nott.web.entity.UserTest;
 import org.nott.web.mapper.UserMapper;
 
 import org.springframework.boot.test.context.SpringBootTest;
