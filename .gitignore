@@ -7,3 +7,5 @@ target
 src/test
 
 .env
+
+test

@@ -15,6 +15,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import javax.sql.DataSource;
 
 /**
+ * mybatis配置类
  * @author Nott
  * @date 2024-5-10
  */

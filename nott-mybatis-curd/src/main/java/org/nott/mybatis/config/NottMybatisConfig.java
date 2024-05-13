@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * nott.mybatis属性配置类
  * @author Nott
  * @date 2024-5-10
  */
@@ -22,5 +23,9 @@ public class NottMybatisConfig {
 
     private String mapperLocation;
 
-//    private String mybatisBasePackage;
+    /**
+     * 需要拦截的mapper包
+     */
+    private String[] aopPackage = {""};
+
 }

@@ -7,6 +7,10 @@ import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 
 import java.util.List;
 
+/**
+ * 通用dao层
+ * @param <T>
+ */
 public interface CommonMapper<T> {
 
     @SelectProvider(type = BaseSelectProvider.class,method = "selectOne")

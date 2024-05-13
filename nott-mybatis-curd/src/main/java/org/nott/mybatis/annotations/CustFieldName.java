@@ -1,19 +1,21 @@
 package org.nott.mybatis.annotations;
 
+
 import org.springframework.core.annotation.AliasFor;
 import java.lang.annotation.*;
 
 /**
- * 自定义实体表名注解
+ * 自定义属性名称注解
  */
 @Documented
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CustTableName {
+public @interface CustFieldName {
 
     @AliasFor("name")
     String value() default "";
 
     @AliasFor("value")
     String name() default "";
+
 }

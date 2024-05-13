@@ -2,14 +2,14 @@
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
+import org.nott.mybatis.sql.model.InSelect;
 import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 import org.nott.web.entity.User;
+import org.nott.web.entity.UserTest;
 import org.nott.web.mapper.UserMapper;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.List;
 
 
 /**
@@ -71,6 +71,16 @@ public class MybatisTestClass {
                 SimpleSqlConditionBuilder.create(UserMapper.class)
                         .eq("name","youKnowWho")
         );
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues06(){
+        User user = userMapper.selectOneByCondition(new User(),
+                SimpleSqlConditionBuilder.create(UserMapper.class)
+                        .eq("name","youKnowWho")
+                        .select(InSelect.colum("name").as("test")));
+        ;
         System.out.println(user);
     }
 

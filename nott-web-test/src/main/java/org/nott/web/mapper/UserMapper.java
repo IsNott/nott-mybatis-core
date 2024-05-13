@@ -4,9 +4,6 @@ import org.apache.ibatis.annotations.*;
 import org.nott.mybatis.mapper.CommonMapper;
 import org.nott.web.entity.User;
 import org.nott.web.provider.UserSelectProvider;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 public interface UserMapper extends CommonMapper<User> {
 
