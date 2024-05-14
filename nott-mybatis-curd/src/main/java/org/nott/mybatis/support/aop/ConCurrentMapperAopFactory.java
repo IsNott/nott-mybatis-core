@@ -60,11 +60,18 @@ public class ConCurrentMapperAopFactory {
 
         MybatisSqlBean sqlBean = beanMap.get(name);
 
+        // Single Check
         if (Objects.nonNull(sqlBean)) {
             return sqlBean;
         }
 
+        // 仿双重校验锁
         synchronized (currentMapperClass) {
+            sqlBean = beanMap.get(name);
+            // Double Check
+            if (sqlBean != null) {
+                return sqlBean;
+            }
             // 获取commonMapper的泛型
             Class<?> genericSuperClass = getGenericSuperClass(currentMapperClass);
             Object bean = null;
@@ -169,13 +176,16 @@ public class ConCurrentMapperAopFactory {
         }
 
         synchronized (currentMapperClass) {
+            clazz = mapperGenericClassMap.get(name);
+            if (clazz != null) {
+                return clazz;
+            }
             Class<?> genericSuperClass = getGenericSuperClass(currentMapperClass);
             mapperGenericClassMap.put(name, genericSuperClass);
 
             clazz = genericSuperClass;
         }
         return clazz;
-
     }
 
     private static Class<?> getGenericSuperClass(Class<?> currentMapperClass) {
