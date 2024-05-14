@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.nott.mybatis.provider.BaseSelectProvider;
 import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,6 +13,9 @@ import java.util.List;
  * @param <T>
  */
 public interface CommonMapper<T> {
+
+    @SelectProvider(type = BaseSelectProvider.class,method = "selectById")
+    public T selectById(@Param("id")Serializable id);
 
     @SelectProvider(type = BaseSelectProvider.class,method = "selectOne")
     public T selectOne();

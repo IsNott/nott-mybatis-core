@@ -1,31 +1,37 @@
 package org.nott.mybatis.sql;
 
 import lombok.Data;
+import org.nott.mybatis.sql.enums.SqlOperator;
+import org.nott.mybatis.sql.interfaces.SqlQuery;
+import org.nott.mybatis.sql.interfaces.SqlUpdate;
 import org.nott.mybatis.sql.model.Colum;
+import org.nott.mybatis.sql.model.InSelect;
+import org.nott.mybatis.sql.model.UpdateCombination;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Data
-public class SimpleSqlConditionBuilder implements SqlQuery{
+public class SimpleSqlConditionBuilder implements SqlQuery, SqlUpdate {
 
     List<SqlConditions> sqlConditions = new ArrayList<>();
 
     List<Colum> sqlColum = new ArrayList<>();
+
+    List<UpdateCombination> updateCombinations = new ArrayList<>();
 
     Integer limit;
 
     String append;
 
 
-    public static SimpleSqlConditionBuilder create(Class tClass){
+    public static SimpleSqlConditionBuilder build(){
         return new SimpleSqlConditionBuilder();
     }
 
     @Override
     public SimpleSqlConditionBuilder eq(String colum, Object val) {
-        SqlConditions conditions = new SqlConditions(colum,val,SqlOperator.EQ);
+        SqlConditions conditions = new SqlConditions(colum,val, SqlOperator.EQ);
         this.sqlConditions.add(conditions);
         return this;
     }
@@ -66,8 +72,10 @@ public class SimpleSqlConditionBuilder implements SqlQuery{
     }
 
     @Override
-    public SimpleSqlConditionBuilder select(Colum... colum) {
-        this.sqlColum.addAll(Arrays.asList(colum));
+    public SimpleSqlConditionBuilder select(InSelect... selects) {
+        for (InSelect select : selects) {
+            this.sqlColum.add(select.getColum());
+        }
         return this;
     }
 
@@ -79,7 +87,14 @@ public class SimpleSqlConditionBuilder implements SqlQuery{
 
     @Override
     public SimpleSqlConditionBuilder append(String sql) {
-        return null;
+        this.append = sql;
+        return this;
     }
 
+    @Override
+    public SimpleSqlConditionBuilder set(String colum, Object val) {
+        UpdateCombination combination = new UpdateCombination(colum, val);
+        this.updateCombinations.add(combination);
+        return this;
+    }
 }

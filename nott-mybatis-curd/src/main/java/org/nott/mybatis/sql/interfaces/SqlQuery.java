@@ -1,6 +1,8 @@
-package org.nott.mybatis.sql;
+package org.nott.mybatis.sql.interfaces;
 
+import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 import org.nott.mybatis.sql.model.Colum;
+import org.nott.mybatis.sql.model.InSelect;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public interface SqlQuery {
 
     SimpleSqlConditionBuilder le(String colum, Object val);
 
-    SimpleSqlConditionBuilder select(Colum... colum);
+    SimpleSqlConditionBuilder select(InSelect... selects);
 
 
     SimpleSqlConditionBuilder limit(Integer value);

@@ -1,4 +1,4 @@
-package org.nott.mybatis.sql;
+package org.nott.mybatis.sql.enums;
 
 
 import lombok.Getter;
@@ -9,7 +9,7 @@ public enum SqlOperator {
     NEQ("<>"),
     GE(">="),
     GT(">"),
-    LE("<"),
+    LE("<="),
     LT(">")
 
     ;

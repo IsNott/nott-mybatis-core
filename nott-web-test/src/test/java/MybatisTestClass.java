@@ -67,7 +67,7 @@ public class MybatisTestClass {
     @Test
     public void testIssues05(){
         User user = userMapper.selectOneByCondition(
-                SimpleSqlConditionBuilder.create(UserMapper.class)
+                SimpleSqlConditionBuilder.build()
                         .eq("name","youKnowWho")
         );
         System.out.println(user);
@@ -76,10 +76,22 @@ public class MybatisTestClass {
     @Test
     public void testIssues06(){
         User user = userMapper.selectOneByCondition(
-                SimpleSqlConditionBuilder.create(UserMapper.class)
+                SimpleSqlConditionBuilder.build()
                         .eq("name","youKnowWho")
                         .select(InSelect.colum("name").as("test")));
         ;
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues07(){
+        User user = userMapper.selectOneByCondition(SimpleSqlConditionBuilder.build().le("age",32));
+        ;
+        System.out.println(user);
+    }
+    @Test
+    public void testIssues08(){
+        User user = userMapper.selectById("410544b2-4001-4271-9855-fec4b62350b");
         System.out.println(user);
     }
 

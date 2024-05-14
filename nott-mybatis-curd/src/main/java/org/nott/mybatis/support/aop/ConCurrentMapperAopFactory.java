@@ -120,11 +120,8 @@ public class ConCurrentMapperAopFactory {
             throw new RuntimeException(String.format("Bean %s Field length == 0", bean.getClass()));
         }
         for (Field field : fields) {
-            // 主键跳过
-            if (field.isAnnotationPresent(TableId.class)) {
-                continue;
-                // 字段保存value
-            } else if (field.isAnnotationPresent(Colum.class)) {
+            // 字段保存value
+            if (field.isAnnotationPresent(Colum.class)) {
                 colums.add(field.getDeclaredAnnotation(Colum.class).value());
             } else {
                 colums.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field.getName()));
