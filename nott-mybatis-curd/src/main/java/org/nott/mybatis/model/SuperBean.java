@@ -1,10 +1,9 @@
 package org.nott.mybatis.model;
 
-import com.alibaba.fastjson2.JSON;
-
 import java.io.Serializable;
 
 /**
+ * 标识持久化对象
  * @author Nott
  * @date 2024-5-10
  */

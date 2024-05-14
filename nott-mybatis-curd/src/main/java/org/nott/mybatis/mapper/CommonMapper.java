@@ -14,13 +14,13 @@ import java.util.List;
 public interface CommonMapper<T> {
 
     @SelectProvider(type = BaseSelectProvider.class,method = "selectOne")
-    public T selectOne(T t);
+    public T selectOne();
 
     @SelectProvider(type = BaseSelectProvider.class,method = "selectList")
-    public List<T> selectList(T t);
+    public List<T> selectList();
 
     @SelectProvider(type = BaseSelectProvider.class, method = "selectOneByCondition")
-    public T selectOneByCondition(T t, @Param("simpleSqlConditionBuilder") SimpleSqlConditionBuilder simpleSqlBuilder);
+    public T selectOneByCondition(@Param("simpleSqlConditionBuilder") SimpleSqlConditionBuilder simpleSqlBuilder);
 
 
 }

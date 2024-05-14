@@ -28,4 +28,11 @@ public class ExecuteMapperContextBean {
      * 参数
      */
     private Parameter[] parameters;
+
+    /**
+     * 继承的mapper
+     */
+    private Class<?> extendMapperClass;
+
+
 }

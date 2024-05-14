@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
- * 定义基于mapper的aop
+ * 基于mapper的aop配置
  * @author Nott
  * @date 2024-5-13
  */
@@ -24,7 +24,7 @@ public class MapperContextAutoConfiguration {
 
     private final MybatisAopConfig mybatisAopConfig;
 
-    @Bean("mybatisAopInterceptor")
+    @Bean
     public Interceptor setMybatisAopInterceptor(){
         return new MybatisAopInterceptor();
     }

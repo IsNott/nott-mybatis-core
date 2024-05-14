@@ -1,6 +1,7 @@
 package org.nott.web.entity;
 
 import lombok.Data;
+import org.nott.mybatis.annotations.TableId;
 
 /**
  * @author Nott
@@ -9,6 +10,7 @@ import lombok.Data;
 @Data
 public class User {
 
+    @TableId("id")
     private String id;
 
     private String name;

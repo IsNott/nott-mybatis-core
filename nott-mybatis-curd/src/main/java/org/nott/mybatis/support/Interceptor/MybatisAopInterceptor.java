@@ -9,6 +9,7 @@ import org.springframework.util.ClassUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -17,7 +18,6 @@ import javax.annotation.Nullable;
  */
 
 @Component
-@Slf4j
 public class MybatisAopInterceptor implements MethodInterceptor {
 
     private static final ThreadLocal<ExecuteMapperContextBean> mapperContextThreadLocal = new ThreadLocal<>();
@@ -25,9 +25,13 @@ public class MybatisAopInterceptor implements MethodInterceptor {
     public void set(MethodInvocation invocation){
         ExecuteMapperContextBean bean = new ExecuteMapperContextBean();
 
-        Class<?> aClass = invocation.getThis().getClass();
+        Class<?> aClass = Objects.requireNonNull(invocation.getThis()).getClass();
 
         Class<?>[] interfacesForClass = ClassUtils.getAllInterfacesForClass(aClass, aClass.getClassLoader());
+
+        Class<?>[] interfaces = interfacesForClass[0].getInterfaces();
+
+        bean.setExtendMapperClass(interfaces[0]);
 
         bean.setCurrentMapperClass(interfacesForClass[0]);
 
@@ -37,7 +41,6 @@ public class MybatisAopInterceptor implements MethodInterceptor {
 
         mapperContextThreadLocal.set(bean);
     }
-
 
     @Nullable
     @Override
