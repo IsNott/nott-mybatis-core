@@ -9,7 +9,9 @@ import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
 import java.io.Serializable;
 import java.util.Map;
 
-
+/**
+ * 基础mybatis selectProvider
+ */
 public class BaseSelectProvider {
 
     public static String selectById(Map<String,Serializable> map){
@@ -17,7 +19,6 @@ public class BaseSelectProvider {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         return SqlBuilder.buildFindByPkSql(bean, id);
     }
-
 
     public static String selectOne(){
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
@@ -41,5 +42,22 @@ public class BaseSelectProvider {
         return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 
-    //TODO Page select
+    public static String pageCountByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
+        MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
+        return SqlBuilder.buildPageCount(bean, querySqlConditionBuilder);
+    }
+
+    public static String pageCount() {
+        MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
+        return SqlBuilder.buildPageCount(bean, null);
+    }
+
+    // Page select
+    public static String page(Map<String, Object> param) {
+        MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
+        QuerySqlConditionBuilder builder = param.containsKey("querySqlConditionBuilder") ? (QuerySqlConditionBuilder) param.get("querySqlConditionBuilder") : null;
+        Integer page = (Integer) param.get("page");
+        Integer size = (Integer) param.get("size");
+        return SqlBuilder.buildPage(page, size, bean, builder);
+    }
 }

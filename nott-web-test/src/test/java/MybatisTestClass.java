@@ -101,7 +101,7 @@ public class MybatisTestClass {
     public void testIssues09(){
         User user = new User();
         user.setId("410544b2-4001-4271-9855-fec4b62350b");
-        user.setName("mybatis-test");
+        user.setName("mybatis-test1");
         int affectRow = userMapper.updateById(user);
         System.out.println(affectRow);
     }

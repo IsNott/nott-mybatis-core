@@ -21,66 +21,90 @@ import java.util.Objects;
 
 /**
  * Sql构造器
+ *
  * @author Nott
  * @date 2024-5-13
  */
 public class SqlBuilder {
 
-    public static String buildSql(MybatisSqlBean sqlBean, QuerySqlConditionBuilder querySqlConditionBuilder){
-        String tableName = sqlBean.getTableName();
+    public static SQL generateBaseSql(MybatisSqlBean sqlBean) {
+        return new SQL().FROM(sqlBean.getTableName());
+    }
 
-        SQL sql = new SQL();
-        sql.FROM(tableName);
+    public static SQL buildMybatisSqlEntity(MybatisSqlBean sqlBean, QuerySqlConditionBuilder querySqlConditionBuilder) {
+        SQL sql = generateBaseSql(sqlBean);
 
         List<String> tableColums = sqlBean.getTableColums();
+        List<SqlConditions> sqlConditions = querySqlConditionBuilder.getSqlConditions();
+        List<Colum> sqlColum = querySqlConditionBuilder.getSqlColum();
 
-        String finallySql;
+        buildSelectSql(sqlBean, sql, tableColums, sqlColum);
+        buildWhereSql(sql, sqlConditions);
+        buildLimitSql(querySqlConditionBuilder, sql);
+        return sql;
+    }
 
-        if (querySqlConditionBuilder == null) {
-            for (String tableColum : tableColums) {
-                sql.SELECT(tableColum);
-            }
-        } else {
-            List<SqlConditions> sqlConditions = querySqlConditionBuilder.getSqlConditions();
-            List<Colum> sqlColum = querySqlConditionBuilder.getSqlColum();
-            if (CollectionUtils.isEmpty(sqlColum)) {
-                for (String tableColum : tableColums) {
-                    sql.SELECT(tableColum);
-                }
-            } else {
-                StringBuilder builder = new StringBuilder();
-                // 判断查询字段是否符合
-                for (Colum colum : sqlColum) {
-                    String asName = colum.getAsName();
-                    String fieldName = colum.getFieldName();
-                    if (!tableColums.contains(fieldName)) {
-                        throw new SqlParseException(String.format("Provide field '%s' not exist '%s' table colum.", fieldName, sqlBean.getTableName()));
-                    }
-                    builder.append(StringUtils.isNotEmpty(asName) ? fieldName + " as " + asName : fieldName);
-                }
-                sql.SELECT(builder.toString());
-            }
-            if (!CollectionUtils.isEmpty(sqlConditions)) {
-                sql.WHERE("1=1");
-                for (SqlConditions sqlCondition : sqlConditions) {
-                    SqlOperator sqlOperator = sqlCondition.getSqlOperator();
-                    Object value = sqlCondition.getValue();
-                    value = reassembleValue(value);
-                    sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue() + value);
-                }
-            }
-            if (querySqlConditionBuilder.getLimit() != null) {
-                sql.LIMIT(querySqlConditionBuilder.getLimit());
+    private static void buildAppendSql(QuerySqlConditionBuilder querySqlConditionBuilder, StringBuilder sql) {
+        if (!querySqlConditionBuilder.getAppend().isEmpty()) {
+            for (String appendSQL : querySqlConditionBuilder.getAppend()) {
+                sql.append(appendSQL);
             }
         }
+    }
 
-        finallySql = sql.toString();
+    private static void buildLimitSql(QuerySqlConditionBuilder querySqlConditionBuilder, SQL sql) {
+        if (querySqlConditionBuilder.getLimit() != null) {
+            sql.LIMIT(querySqlConditionBuilder.getLimit());
+        }
+    }
+
+    public static String buildSql(MybatisSqlBean sqlBean, QuerySqlConditionBuilder querySqlConditionBuilder) {
+        boolean hasBuilder = querySqlConditionBuilder != null;
+        if (!hasBuilder) {
+            querySqlConditionBuilder = QuerySqlConditionBuilder.build();
+        }
+        StringBuilder sqlStringBuilder = new StringBuilder(buildMybatisSqlEntity(sqlBean, querySqlConditionBuilder).toString());
+        buildAppendSql(querySqlConditionBuilder, sqlStringBuilder);
+        String finallySql = sqlStringBuilder.toString();
         System.out.println("Generate mybatis sql = " + finallySql);
         return finallySql;
     }
 
+    private static void buildSelectSql(MybatisSqlBean sqlBean, SQL sql, List<String> tableColums, List<Colum> sqlColum) {
+        if (sqlColum == null || CollectionUtils.isEmpty(sqlColum)) {
+            for (String tableColum : tableColums) {
+                sql.SELECT(tableColum);
+            }
+        } else {
+            StringBuilder builder = new StringBuilder();
+            // 判断查询字段是否符合
+            for (Colum colum : sqlColum) {
+                String asName = colum.getAsName();
+                String fieldName = colum.getFieldName();
+                if (!tableColums.contains(fieldName)) {
+                    throw new SqlParseException(String.format("Provide field '%s' not exist '%s' table colum.", fieldName, sqlBean.getTableName()));
+                }
+                builder.append(StringUtils.isNotEmpty(asName) ? fieldName + " as " + asName : fieldName);
+            }
+            sql.SELECT(builder.toString());
+        }
+    }
+
+    private static void buildWhereSql(SQL sql, List<SqlConditions> sqlConditions) {
+        if (sqlConditions != null && !CollectionUtils.isEmpty(sqlConditions)) {
+            sql.WHERE("1=1");
+            for (SqlConditions sqlCondition : sqlConditions) {
+                SqlOperator sqlOperator = sqlCondition.getSqlOperator();
+                Object value = sqlCondition.getValue();
+                value = reassembleValue(value);
+                sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue() + value);
+            }
+        }
+    }
+
     /**
      * 重组装字符串类型对象的值
+     *
      * @param value
      * @return
      */
@@ -96,24 +120,28 @@ public class SqlBuilder {
 
     public static String buildFindByPkSql(MybatisSqlBean bean, Serializable value) {
         String valStr = value.toString();
-        String tableName = bean.getTableName();
-        List<String> colum = bean.getTableColums();
         valStr = (String) reassembleValue(valStr);
         Pk pk = bean.getPk();
-        SQL sql = new SQL() {{
-            for (String colum : colum) {
-                SELECT(colum);
-            }
-            FROM(tableName);
-        }};
-        sql.WHERE(pk.getName() + SqlOperator.EQ.getValue() + valStr);
-        return sql.toString();
+        QuerySqlConditionBuilder builder = QuerySqlConditionBuilder.build().eq(pk.getName(), valStr);
+        return buildSql(bean, builder);
+    }
+
+    public static void buildSingleWhereSql(SQL sql, SqlConditions sqlCondition) {
+        sql.WHERE(sqlCondition.getColum() + sqlCondition.getSqlOperator().getValue() + sqlCondition.getValue());
     }
 
     public static String buildUpdateByIdSql(MybatisSqlBean mybatisSqlBean, Object entity) {
         Pk pk = mybatisSqlBean.getPk();
-        String tableName = mybatisSqlBean.getTableName();
 
+        Object pkValue = getEntityPKValue(entity);
+
+        SQL sql = buildUpdateSql(mybatisSqlBean);
+        buildSetSql(entity, sql);
+        buildSingleWhereSql(sql, SqlConditions.builder().colum(pk.getName()).sqlOperator(SqlOperator.EQ).value(pkValue).build());
+        return sql.toString();
+    }
+
+    private static Object getEntityPKValue(Object entity) {
         Field[] fields = entity.getClass().getDeclaredFields();
         Field pkField = Arrays.stream(fields).filter(r -> r.isAnnotationPresent(TableId.class)).findFirst().orElse(null);
         Objects.requireNonNull(pkField, "Primary Key Field Not declared");
@@ -121,14 +149,29 @@ public class SqlBuilder {
             throw new SqlParseException(String.format("%s Entity fields do not allow empty", entity.getClass().getName()));
         }
 
-        SQL sql = new SQL() {{
-            UPDATE(tableName);
-        }};
-
         Object pkValue;
         try {
             pkField.setAccessible(true);
             pkValue = reassembleValue(pkField.get(entity));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return pkValue;
+    }
+
+    private static SQL buildUpdateSql(MybatisSqlBean mybatisSqlBean) {
+        String tableName = mybatisSqlBean.getTableName();
+        SQL sql = new SQL() {{
+            UPDATE(tableName);
+        }};
+        return sql;
+    }
+
+    private static void buildSetSql(Object entity, SQL sql) {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        Field pkField = Arrays.stream(fields).filter(r -> r.isAnnotationPresent(TableId.class)).findFirst().orElse(null);
+        try {
+            pkField.setAccessible(true);
             for (Field field : fields) {
                 // 需要操作私有变量
                 field.setAccessible(true);
@@ -136,7 +179,7 @@ public class SqlBuilder {
                 if (field.isAnnotationPresent(TableId.class)) {
                     continue;
                 }
-                if(Objects.isNull(field.get(entity))){
+                if (Objects.isNull(field.get(entity))) {
                     continue;
                 }
                 String name;
@@ -149,17 +192,14 @@ public class SqlBuilder {
                 }
                 sql.SET(name + SqlOperator.EQ.getValue() + value);
             }
-            sql.WHERE(pk.getName() + SqlOperator.EQ.getValue() + pkValue);
+
         } catch (IllegalAccessException e) {
             throw new SqlParseException(e);
         }
-
-        return sql.toString();
     }
 
     public static String buildUpdateSql(MybatisSqlBean mybatisSqlBean, UpdateSqlConditionBuilder updateSqlConditionBuilder) {
         Pk pk = mybatisSqlBean.getPk();
-
 
         String tableName = mybatisSqlBean.getTableName();
         List<UpdateCombination> updateCombinations = updateSqlConditionBuilder.getUpdateCombinations();
@@ -179,6 +219,20 @@ public class SqlBuilder {
         }
 //        sql.WHERE(pk.getName() + SqlOperator.EQ + valStr);
 
+        return sql.toString();
+    }
+
+    public static String buildPageCount(MybatisSqlBean bean, QuerySqlConditionBuilder builder) {
+        SQL sql = generateBaseSql(bean);
+        sql.SELECT("COUNT(1) as totalResult");
+        buildWhereSql(sql, Objects.isNull(builder) ? null : builder.getSqlConditions());
+        return sql.toString();
+    }
+
+    public static String buildPage(Integer page, Integer size, MybatisSqlBean bean, QuerySqlConditionBuilder builder) {
+        SQL sql = buildMybatisSqlEntity(bean, builder);
+        sql.LIMIT(size);
+        sql.OFFSET(size * (page - 1));
         return sql.toString();
     }
 }

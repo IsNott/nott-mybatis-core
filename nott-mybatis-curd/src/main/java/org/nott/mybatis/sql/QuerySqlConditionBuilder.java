@@ -5,6 +5,7 @@ import org.nott.mybatis.sql.enums.SqlOperator;
 import org.nott.mybatis.sql.interfaces.SqlQuery;
 import org.nott.mybatis.sql.model.Colum;
 import org.nott.mybatis.sql.model.InSelect;
+import org.nott.mybatis.sql.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +13,17 @@ import java.util.List;
 @Data
 public class QuerySqlConditionBuilder implements SqlQuery {
 
-    List<SqlConditions> sqlConditions = new ArrayList<>();
+    private List<SqlConditions> sqlConditions = new ArrayList<>();
 
-    List<Colum> sqlColum = new ArrayList<>();
+    private List<Colum> sqlColum = new ArrayList<>();
 
-    Integer limit;
+    private List<Order> orderColum = new ArrayList<>();
 
-    String append;
+    private List<String> append = new ArrayList<>();
+
+    private String alias;
+
+    private Integer limit;
 
 
     public static QuerySqlConditionBuilder build(){
@@ -83,7 +88,7 @@ public class QuerySqlConditionBuilder implements SqlQuery {
 
     @Override
     public QuerySqlConditionBuilder append(String sql) {
-        this.append = sql;
+        this.append.add(sql);
         return this;
     }
 }

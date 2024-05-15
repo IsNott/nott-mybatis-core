@@ -27,7 +27,7 @@ public interface CommonMapper<T> {
     public List<T> selectList();
 
     @SelectProvider(type = BaseSelectProvider.class, method = "selectOneByCondition")
-    public T selectOneByCondition(@Param("simpleSqlConditionBuilder") QuerySqlConditionBuilder simpleSqlBuilder);
+    public T selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
 
     @UpdateProvider(type = BaseUpdateProvider.class, method = "updateById")
     public int updateById(@Param("entity") T t);
