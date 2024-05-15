@@ -1,8 +1,8 @@
 package org.nott.mybatis.sql.interfaces;
 
-import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
+import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
 
 public interface SqlUpdate {
 
-    SimpleSqlConditionBuilder set(String colum, Object val);
+    UpdateSqlConditionBuilder set(String colum, Object val);
 }

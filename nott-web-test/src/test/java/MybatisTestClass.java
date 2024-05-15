@@ -2,13 +2,15 @@
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
+import org.nott.mybatis.sql.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.model.InSelect;
-import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.List;
 
 
 /**
@@ -60,14 +62,14 @@ public class MybatisTestClass {
 
     @Test
     public void testIssues04(){
-        User user = userMapper.selectOne();
-        System.out.println(user);
+        List<User> users = userMapper.selectList();
+        System.out.println(users);
     }
 
     @Test
     public void testIssues05(){
         User user = userMapper.selectOneByCondition(
-                SimpleSqlConditionBuilder.build()
+                QuerySqlConditionBuilder.build()
                         .eq("name","youKnowWho")
         );
         System.out.println(user);
@@ -76,7 +78,7 @@ public class MybatisTestClass {
     @Test
     public void testIssues06(){
         User user = userMapper.selectOneByCondition(
-                SimpleSqlConditionBuilder.build()
+                QuerySqlConditionBuilder.build()
                         .eq("name","youKnowWho")
                         .select(InSelect.colum("name").as("test")));
         ;
@@ -85,7 +87,7 @@ public class MybatisTestClass {
 
     @Test
     public void testIssues07(){
-        User user = userMapper.selectOneByCondition(SimpleSqlConditionBuilder.build().le("age",32));
+        User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().le("age",32));
         ;
         System.out.println(user);
     }
@@ -93,6 +95,15 @@ public class MybatisTestClass {
     public void testIssues08(){
         User user = userMapper.selectById("410544b2-4001-4271-9855-fec4b62350b");
         System.out.println(user);
+    }
+
+    @Test
+    public void testIssues09(){
+        User user = new User();
+        user.setId("410544b2-4001-4271-9855-fec4b62350b");
+        user.setName("mybatis-test");
+        int affectRow = userMapper.updateById(user);
+        System.out.println(affectRow);
     }
 
 }

@@ -2,7 +2,7 @@ package org.nott.mybatis.provider;
 
 
 import org.nott.mybatis.model.MybatisSqlBean;
-import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
+import org.nott.mybatis.sql.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.SqlBuilder;
 import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
 
@@ -21,14 +21,14 @@ public class BaseSelectProvider {
 
     public static String selectOne(){
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
-        SimpleSqlConditionBuilder.build().limit(1);
+        QuerySqlConditionBuilder.build().limit(1);
         return SqlBuilder.buildSql(bean,null);
     }
 
-    public static String selectOneByCondition(SimpleSqlConditionBuilder simpleSqlConditionBuilder){
+    public static String selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder){
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
-        simpleSqlConditionBuilder.setLimit(1);
-        return SqlBuilder.buildSql(bean, simpleSqlConditionBuilder);
+        querySqlConditionBuilder.setLimit(1);
+        return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 
     public static String selectList(){
@@ -36,9 +36,9 @@ public class BaseSelectProvider {
         return SqlBuilder.buildSql(bean,null);
     }
 
-    public static String selectListByCondition(SimpleSqlConditionBuilder simpleSqlConditionBuilder){
+    public static String selectListByCondition(QuerySqlConditionBuilder querySqlConditionBuilder){
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
-        return SqlBuilder.buildSql(bean, simpleSqlConditionBuilder);
+        return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 
     //TODO Page select

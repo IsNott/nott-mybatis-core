@@ -1,10 +1,7 @@
 package org.nott.mybatis.sql.interfaces;
 
-import org.nott.mybatis.sql.SimpleSqlConditionBuilder;
-import org.nott.mybatis.sql.model.Colum;
+import org.nott.mybatis.sql.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.model.InSelect;
-
-import java.util.List;
 
 /**
  * 定义SQL查询支持的方法接口
@@ -12,24 +9,24 @@ import java.util.List;
 
 public interface SqlQuery {
 
-    SimpleSqlConditionBuilder eq(String colum, Object val);
+    QuerySqlConditionBuilder eq(String colum, Object val);
 
-    SimpleSqlConditionBuilder neq(String colum, Object val);
+    QuerySqlConditionBuilder neq(String colum, Object val);
 
-    SimpleSqlConditionBuilder gt(String colum, Object val);
+    QuerySqlConditionBuilder gt(String colum, Object val);
 
-    SimpleSqlConditionBuilder ge(String colum, Object val);
+    QuerySqlConditionBuilder ge(String colum, Object val);
 
-    SimpleSqlConditionBuilder lt(String colum, Object val);
+    QuerySqlConditionBuilder lt(String colum, Object val);
 
-    SimpleSqlConditionBuilder le(String colum, Object val);
+    QuerySqlConditionBuilder le(String colum, Object val);
 
-    SimpleSqlConditionBuilder select(InSelect... selects);
+    QuerySqlConditionBuilder select(InSelect... selects);
 
 
-    SimpleSqlConditionBuilder limit(Integer value);
+    QuerySqlConditionBuilder limit(Integer value);
 
-    SimpleSqlConditionBuilder append(String sql);
+    QuerySqlConditionBuilder append(String sql);
 
 
 }
