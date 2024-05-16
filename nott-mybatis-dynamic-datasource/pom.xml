@@ -27,5 +27,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/hikari-cp/hikari-cp -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

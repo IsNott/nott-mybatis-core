@@ -9,6 +9,9 @@ import lombok.Getter;
 @Getter
 public enum SqlDDLOption{
 
-    UPDATE,INSERT,DELETE,SELECT
+    UPDATE,
+    INSERT,
+    DELETE,
+    SELECT
 
 }

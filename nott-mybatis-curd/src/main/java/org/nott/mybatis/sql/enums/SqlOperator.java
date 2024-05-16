@@ -5,14 +5,14 @@ import lombok.Getter;
 
 @Getter
 public enum SqlOperator {
-    EQ("="),
-    NEQ("<>"),
-    GE(">="),
-    GT(">"),
-    LE("<="),
-    LT(">"),
-    IN("in")
-
+    EQ(" = "),
+    NEQ(" <> "),
+    GE(" >= "),
+    GT(" > "),
+    LE(" <= "),
+    LT(" > "),
+    IN(" in "),
+    LIKE(" LIKE "),
     ;
 
     private String value;
@@ -20,4 +20,6 @@ public enum SqlOperator {
     SqlOperator(String value) {
         this.value = value;
     }
+
+
 }

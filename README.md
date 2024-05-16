@@ -99,3 +99,5 @@ mybatis与spring整合版本对应关系参考：https://mybatis.org/spring/
 
 jsqlparser:https://jsqlparser.github.io/JSqlParser/usage.html
 
+hikari数据源配置参考: https://www.cnblogs.com/didispace/p/12291832.html
+

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@ConfigurationProperties("spring.datasource")
+@ConfigurationProperties("nott.datasource")
 @Data
 public class DataSourceConfig {
 
@@ -23,4 +23,6 @@ public class DataSourceConfig {
     private String driverClassName;
 
     private String type;
+
+    private HikariDataSourceConfig hikari;
 }

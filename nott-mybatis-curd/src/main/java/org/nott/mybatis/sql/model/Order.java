@@ -1,5 +1,6 @@
 package org.nott.mybatis.sql.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.nott.mybatis.sql.enums.OrderMode;
@@ -10,6 +11,7 @@ import org.nott.mybatis.sql.enums.OrderMode;
  */
 @Setter
 @Getter
+@Builder
 public class Order {
 
     private String colum;

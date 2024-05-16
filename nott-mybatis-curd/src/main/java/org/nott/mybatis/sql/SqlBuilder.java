@@ -5,12 +5,15 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.nott.mybatis.annotations.TableId;
+import org.nott.mybatis.constant.SQLConstant;
 import org.nott.mybatis.exception.SqlParseException;
 import org.nott.mybatis.model.MybatisSqlBean;
 import org.nott.mybatis.model.Pk;
+import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlDDLOption;
 import org.nott.mybatis.sql.enums.SqlOperator;
 import org.nott.mybatis.sql.model.Colum;
+import org.nott.mybatis.sql.model.Order;
 import org.nott.mybatis.sql.model.UpdateCombination;
 import org.springframework.util.CollectionUtils;
 
@@ -45,8 +48,27 @@ public class SqlBuilder {
 
         buildSelectSql(sqlBean, sql, tableColums, sqlColum);
         buildWhereSql(sql, sqlConditions);
-        buildLimitSql(querySqlConditionBuilder, sql);
+        buildOrderBySql(sql, querySqlConditionBuilder);
+        buildGroupBySql(sql, querySqlConditionBuilder);
+        buildLimitSql(sql, querySqlConditionBuilder);
+        buildHavingSql(sql, querySqlConditionBuilder);
         return sql;
+    }
+
+    private static void buildHavingSql(SQL sql, QuerySqlConditionBuilder querySqlConditionBuilder) {
+        List<String> havingSql = querySqlConditionBuilder.getHavingSql();
+        if (havingSql.isEmpty()) {
+            return;
+        }
+        sql.HAVING(havingSql.toArray(String[]::new));
+    }
+
+    private static void buildGroupBySql(SQL sql, QuerySqlConditionBuilder querySqlConditionBuilder) {
+        List<String> groupByColum = querySqlConditionBuilder.getGroupByColum();
+        if (groupByColum.isEmpty()) {
+            return;
+        }
+        sql.GROUP_BY(groupByColum.toArray(String[]::new));
     }
 
     private static void buildAppendSql(QuerySqlConditionBuilder querySqlConditionBuilder, StringBuilder sql) {
@@ -57,7 +79,7 @@ public class SqlBuilder {
         }
     }
 
-    private static void buildLimitSql(QuerySqlConditionBuilder querySqlConditionBuilder, SQL sql) {
+    private static void buildLimitSql(SQL sql, QuerySqlConditionBuilder querySqlConditionBuilder) {
         if (querySqlConditionBuilder.getLimit() != null) {
             sql.LIMIT(querySqlConditionBuilder.getLimit());
         }
@@ -99,12 +121,44 @@ public class SqlBuilder {
         if (sqlConditions != null && !CollectionUtils.isEmpty(sqlConditions)) {
             sql.WHERE("1=1");
             for (SqlConditions sqlCondition : sqlConditions) {
+                boolean isLikeSql = sqlCondition.getLikeMode() != null;
                 SqlOperator sqlOperator = sqlCondition.getSqlOperator();
                 Object value = sqlCondition.getValue();
+                if (isLikeSql) {
+                    value = buildLikeAround(sqlCondition.getLikeMode(), value);
+                }
                 value = reassembleValue(value);
                 sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue() + value);
             }
         }
+    }
+
+    private static void buildOrderBySql(SQL sql, QuerySqlConditionBuilder querySqlConditionBuilder) {
+        List<Order> orderColum = querySqlConditionBuilder.getOrderColum();
+        if (orderColum.isEmpty()) {
+            return;
+        }
+        for (Order order : orderColum) {
+            String colum = order.getColum();
+            String mode = order.getOrderMode().getMode();
+            sql.ORDER_BY(colum + mode);
+        }
+    }
+
+    /**
+     * 变量加入"%"通配符
+     * @param mode like模式枚举
+     * @param value 参与搜索的变量
+     * @return 加入通配符后的变量
+     */
+    private static Object buildLikeAround(LikeMode mode, Object value) {
+        switch (mode) {
+            default -> value = value;
+            case ALL -> value = SQLConstant.PERCENTAGE + value + SQLConstant.PERCENTAGE;
+            case BEFORE -> value = SQLConstant.PERCENTAGE+ value;
+            case AFTER -> value = value + SQLConstant.PERCENTAGE;
+        }
+        return value;
     }
 
     /**
@@ -118,16 +172,16 @@ public class SqlBuilder {
         String name = valClass.getName();
 
         if (String.class.getName().equals(name)) {
-            value = "'" + value + "'";
+            value = SQLConstant.SINGLE_QUOTE + value + SQLConstant.SINGLE_QUOTE;
         }
         if (List.class.isAssignableFrom(valClass)) {
-            StringBuilder stringBuilder = new StringBuilder("(");
+            StringBuilder stringBuilder = new StringBuilder(SQLConstant.LEFT_PARENTHESIS);
             for (Object obj : (List) value) {
                 Object objVal = reassembleValue(obj);
-                stringBuilder.append(objVal).append(",");
+                stringBuilder.append(objVal).append(SQLConstant.COMMA);
             }
-            stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(","));
-            stringBuilder.append(")");
+            stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(SQLConstant.COMMA));
+            stringBuilder.append(SQLConstant.RIGHT_PARENTHESIS);
             value = stringBuilder.toString();
         }
         return value;
@@ -150,7 +204,7 @@ public class SqlBuilder {
             default -> sql.WHERE(colum + sqlOperator + sqlConditionValue);
             case IN -> {
                 sqlConditionValue = reassembleValue(sqlConditionValue);
-                sql.WHERE(colum + " " + sqlOperator + " " + sqlConditionValue);
+                sql.WHERE(colum + SQLConstant.SPACE + sqlOperator + SQLConstant.SPACE + sqlConditionValue);
             }
         }
 
@@ -241,7 +295,7 @@ public class SqlBuilder {
                 switch (ddlOption) {
                     default -> throw new SqlParseException("Other option is not support for now");
                     case UPDATE -> sql.SET(name + SqlOperator.EQ.getValue() + value);
-                    case INSERT -> sql.VALUES(name, value + "");
+                    case INSERT -> sql.VALUES(name, value + SQLConstant.EMPTY_STRING);
                 }
             }
 
@@ -251,8 +305,6 @@ public class SqlBuilder {
     }
 
     public static String buildUpdateSql(MybatisSqlBean mybatisSqlBean, UpdateSqlConditionBuilder updateSqlConditionBuilder) {
-        Pk pk = mybatisSqlBean.getPk();
-
         String tableName = mybatisSqlBean.getTableName();
         List<UpdateCombination> updateCombinations = updateSqlConditionBuilder.getUpdateCombinations();
         if (updateCombinations.isEmpty()) {

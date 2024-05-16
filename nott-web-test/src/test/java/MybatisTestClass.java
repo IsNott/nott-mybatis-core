@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.nott.Application;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.enums.LikeMode;
+import org.nott.mybatis.sql.model.InLike;
 import org.nott.mybatis.sql.model.InSelect;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
@@ -140,5 +142,45 @@ public class MybatisTestClass {
     public void testIssues14(){
         int result = userMapper.deleteByIds(Arrays.asList("123435345"));
         System.out.println(result);
+    }
+
+    @Test
+    public void testIssues15(){
+        User user = userMapper.selectOneByCondition(
+                QuerySqlConditionBuilder.build().like(InLike.choose("name", "you", LikeMode.AFTER))
+        );
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues16(){
+        User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().like("name", "you", LikeMode.AFTER));
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues17(){
+        User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().like("id", "1", LikeMode.ALL)
+                .orderByAsc("id","name"));
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues18(){
+        User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build()
+                .like("id", "1", LikeMode.ALL)
+                .orderByAsc("id").orderByDesc("email"));
+        System.out.println(user);
+    }
+
+    @Test
+    public void testIssues19(){
+        User user = userMapper.selectOneByCondition(
+                QuerySqlConditionBuilder.build()
+                        .select(InSelect.colum("name"))
+                        .like("name", "you", LikeMode.ALL)
+                        .orderByAsc("name")
+                        .groupBy("name"));
+        System.out.println(user);
     }
 }
