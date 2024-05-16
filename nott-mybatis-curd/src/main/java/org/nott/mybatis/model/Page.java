@@ -14,12 +14,12 @@ public class Page<T> {
 
     private List<T> records;
 
-    private Long total;
+    private Long totalResult;
 
-    private Integer totalPage;
+    private Integer totalPage = 0;
 
-    private Integer currentPage;
+    private Integer currentPage = 1;
 
-    private Integer size;
+    private Integer size = 10;
 
 }

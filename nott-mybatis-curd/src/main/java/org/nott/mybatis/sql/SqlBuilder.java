@@ -8,6 +8,7 @@ import org.nott.mybatis.annotations.TableId;
 import org.nott.mybatis.exception.SqlParseException;
 import org.nott.mybatis.model.MybatisSqlBean;
 import org.nott.mybatis.model.Pk;
+import org.nott.mybatis.sql.enums.SqlDDLOption;
 import org.nott.mybatis.sql.enums.SqlOperator;
 import org.nott.mybatis.sql.model.Colum;
 import org.nott.mybatis.sql.model.UpdateCombination;
@@ -29,6 +30,10 @@ public class SqlBuilder {
 
     public static SQL generateBaseSql(MybatisSqlBean sqlBean) {
         return new SQL().FROM(sqlBean.getTableName());
+    }
+
+    public static SQL generateBaseSql(MybatisSqlBean sqlBean, boolean isDelete) {
+        return isDelete ? new SQL().DELETE_FROM(sqlBean.getTableName()) : generateBaseSql(sqlBean);
     }
 
     public static SQL buildMybatisSqlEntity(MybatisSqlBean sqlBean, QuerySqlConditionBuilder querySqlConditionBuilder) {
@@ -109,11 +114,21 @@ public class SqlBuilder {
      * @return
      */
     private static Object reassembleValue(Object value) {
-        Class<?> valClass = value.getClass();
+        Class valClass = value.getClass();
         String name = valClass.getName();
 
         if (String.class.getName().equals(name)) {
             value = "'" + value + "'";
+        }
+        if (List.class.isAssignableFrom(valClass)) {
+            StringBuilder stringBuilder = new StringBuilder("(");
+            for (Object obj : (List) value) {
+                Object objVal = reassembleValue(obj);
+                stringBuilder.append(objVal).append(",");
+            }
+            stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(","));
+            stringBuilder.append(")");
+            value = stringBuilder.toString();
         }
         return value;
     }
@@ -127,7 +142,18 @@ public class SqlBuilder {
     }
 
     public static void buildSingleWhereSql(SQL sql, SqlConditions sqlCondition) {
-        sql.WHERE(sqlCondition.getColum() + sqlCondition.getSqlOperator().getValue() + sqlCondition.getValue());
+        SqlOperator operator = sqlCondition.getSqlOperator();
+        String sqlOperator = sqlCondition.getSqlOperator().getValue();
+        String colum = sqlCondition.getColum();
+        Object sqlConditionValue = sqlCondition.getValue();
+        switch (operator) {
+            default -> sql.WHERE(colum + sqlOperator + sqlConditionValue);
+            case IN -> {
+                sqlConditionValue = reassembleValue(sqlConditionValue);
+                sql.WHERE(colum + " " + sqlOperator + " " + sqlConditionValue);
+            }
+        }
+
     }
 
     public static String buildUpdateByIdSql(MybatisSqlBean mybatisSqlBean, Object entity) {
@@ -136,7 +162,7 @@ public class SqlBuilder {
         Object pkValue = getEntityPKValue(entity);
 
         SQL sql = buildUpdateSql(mybatisSqlBean);
-        buildSetSql(entity, sql);
+        buildSetSql(entity, sql, SqlDDLOption.UPDATE);
         buildSingleWhereSql(sql, SqlConditions.builder().colum(pk.getName()).sqlOperator(SqlOperator.EQ).value(pkValue).build());
         return sql.toString();
     }
@@ -167,30 +193,56 @@ public class SqlBuilder {
         return sql;
     }
 
-    private static void buildSetSql(Object entity, SQL sql) {
+    public static String buildDeleteByPkSql(MybatisSqlBean mybatisSqlBean, Serializable value) {
+        SQL sql = generateBaseSql(mybatisSqlBean, true);
+        Object valueObj = (Object) reassembleValue(value);
+        buildSingleWhereSql(sql, SqlConditions.builder().colum(mybatisSqlBean.getPk().getName()).sqlOperator(SqlOperator.EQ).value(valueObj).build());
+        return sql.toString();
+    }
+
+    public static String buildDeleteListSql(MybatisSqlBean mybatisSqlBean, List ids) {
+        SQL sql = generateBaseSql(mybatisSqlBean, true);
+        buildSingleWhereSql(sql, SqlConditions.builder().colum(mybatisSqlBean.getPk().getName()).sqlOperator(SqlOperator.IN).value(ids).build());
+        return sql.toString();
+    }
+
+
+    private static void buildSetSql(Object entity, SQL sql, SqlDDLOption ddlOption) {
         Field[] fields = entity.getClass().getDeclaredFields();
         Field pkField = Arrays.stream(fields).filter(r -> r.isAnnotationPresent(TableId.class)).findFirst().orElse(null);
+
+        boolean skipTableIdColum = SqlDDLOption.UPDATE.equals(ddlOption);
         try {
             pkField.setAccessible(true);
             for (Field field : fields) {
                 // 需要操作私有变量
                 field.setAccessible(true);
-                boolean hasAnnotationPresent = field.isAnnotationPresent(org.nott.mybatis.annotations.Colum.class);
-                if (field.isAnnotationPresent(TableId.class)) {
+                String name;
+                boolean hasColumAnnotationPresent = field.isAnnotationPresent(org.nott.mybatis.annotations.Colum.class);
+                boolean hasIdAnnotationPresent = field.isAnnotationPresent(TableId.class);
+                if (hasIdAnnotationPresent && skipTableIdColum) {
                     continue;
                 }
                 if (Objects.isNull(field.get(entity))) {
                     continue;
                 }
-                String name;
                 Object value = reassembleValue(field.get(entity));
-                if (hasAnnotationPresent) {
+
+                if (hasColumAnnotationPresent) {
                     name = StringUtils.isNotEmpty(field.getAnnotation(org.nott.mybatis.annotations.Colum.class).value()) ?
                             field.getAnnotation(org.nott.mybatis.annotations.Colum.class).value() : field.getAnnotation(org.nott.mybatis.annotations.Colum.class).name();
+                } else if (hasIdAnnotationPresent) {
+                    name = StringUtils.isNotEmpty(field.getAnnotation(TableId.class).value()) ?
+                            field.getAnnotation(TableId.class).value() : field.getAnnotation(TableId.class).name();
                 } else {
                     name = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field.getName());
                 }
-                sql.SET(name + SqlOperator.EQ.getValue() + value);
+
+                switch (ddlOption) {
+                    default -> throw new SqlParseException("Other option is not support for now");
+                    case UPDATE -> sql.SET(name + SqlOperator.EQ.getValue() + value);
+                    case INSERT -> sql.VALUES(name, value + "");
+                }
             }
 
         } catch (IllegalAccessException e) {
@@ -230,9 +282,18 @@ public class SqlBuilder {
     }
 
     public static String buildPage(Integer page, Integer size, MybatisSqlBean bean, QuerySqlConditionBuilder builder) {
-        SQL sql = buildMybatisSqlEntity(bean, builder);
+        SQL sql = buildMybatisSqlEntity(bean, Objects.isNull(builder) ? new QuerySqlConditionBuilder() : builder);
         sql.LIMIT(size);
         sql.OFFSET(size * (page - 1));
+        return sql.toString();
+    }
+
+    public static String buildInsertSql(MybatisSqlBean bean, Object obj) {
+        SQL sql = new SQL() {{
+            INSERT_INTO(bean.getTableName());
+        }};
+        buildSetSql(obj, sql, SqlDDLOption.INSERT);
+        System.out.println(sql.toString());
         return sql.toString();
     }
 }

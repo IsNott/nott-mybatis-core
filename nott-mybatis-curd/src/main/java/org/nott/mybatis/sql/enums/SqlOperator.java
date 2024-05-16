@@ -10,7 +10,8 @@ public enum SqlOperator {
     GE(">="),
     GT(">"),
     LE("<="),
-    LT(">")
+    LT(">"),
+    IN("in")
 
     ;
 

@@ -1,8 +1,9 @@
 package org.nott.mybatis.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
+import org.nott.mybatis.model.Page;
+import org.nott.mybatis.provider.BaseDeleteProvider;
+import org.nott.mybatis.provider.BaseInsertProvider;
 import org.nott.mybatis.provider.BaseSelectProvider;
 import org.nott.mybatis.provider.BaseUpdateProvider;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
@@ -26,9 +27,27 @@ public interface CommonMapper<T> {
     @SelectProvider(type = BaseSelectProvider.class, method = "selectList")
     public List<T> selectList();
 
+    @SelectProvider(type = BaseSelectProvider.class, method = "pageCount")
+    public Page<T> pageCount();
+
+    @SelectProvider(type = BaseSelectProvider.class, method = "pageCountByCondition")
+    public Page<T> pageCountByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
+
+    @SelectProvider(type = BaseSelectProvider.class, method = "page")
+    public Page<T> page(Integer page, Integer size, QuerySqlConditionBuilder querySqlConditionBuilder);
+
     @SelectProvider(type = BaseSelectProvider.class, method = "selectOneByCondition")
     public T selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
 
     @UpdateProvider(type = BaseUpdateProvider.class, method = "updateById")
     public int updateById(@Param("entity") T t);
+
+    @InsertProvider(type = BaseInsertProvider.class, method = "insert")
+    public int insert(@Param("entity") T t);
+
+    @DeleteProvider(type = BaseDeleteProvider.class, method = "deleteById")
+    public int deleteById(@Param("id") Serializable id);
+
+    @DeleteProvider(type = BaseDeleteProvider.class, method = "deleteByIds")
+    public int deleteByIds(@Param("ids") List ids);
 }

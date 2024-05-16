@@ -27,18 +27,70 @@
 |nott-mybatis-curd|mybaits-基础|
 |nott-mybatis-dynamic-datasource|mybatis-动态数据源|
 |nott-web-test|web测试模块|
-## 功能
-update on：2024-5-14 使用aop支持Select基础方法（selectById、selectOne）
-案例：
-```java
-User user = userMapper.selectOneByCondition(
-                SimpleSqlConditionBuilder.build()
-                        .eq("name","youKnowWho")
-                        .select(InSelect.colum("name").as("test")));
-```
+
 
 ## 使用说明
 参考项目web模块test文件夹下的单元测试方法。
+
+自定义mapper可直接获取CommonMapper基础方法
+```java
+public interface UserMapper extends CommonMapper<User> {}
+```
+
+## 功能
+
+update on：2024-5-14 
+
+使用aop支持Select基础方法（selectById、selectOne）、
+单表查询条件构造器
+
+使用示例：
+```java
+List<User> users = userMapper.selectList();
+// 单表条件查询
+User user = userMapper.selectOneByCondition(
+        QuerySqlConditionBuilder.build()
+        .eq("name","youKnowWho")
+        );
+```
+
+```java
+/**
+ * 单表条件查询支持的方法接口
+ */
+public interface SqlQuery {
+
+    QuerySqlConditionBuilder eq(String colum, Object val);
+
+    QuerySqlConditionBuilder neq(String colum, Object val);
+
+    QuerySqlConditionBuilder gt(String colum, Object val);
+
+    QuerySqlConditionBuilder ge(String colum, Object val);
+
+    QuerySqlConditionBuilder lt(String colum, Object val);
+
+    QuerySqlConditionBuilder le(String colum, Object val);
+
+    QuerySqlConditionBuilder select(InSelect... selects);
+
+    QuerySqlConditionBuilder limit(Integer value);
+
+    QuerySqlConditionBuilder append(String sql);
+
+}
+```
+
+update on：2024-5-16
+
+Update、Delete、Insert基础方法
+```
+int affectRow = userMapper.updateById(user);
+int affectRow = userMapper.insert(user);
+int affectRow = userMapper.deleteById("123435345");
+int affectRow = userMapper.deleteByIds(Arrays.asList("123435345"));
+```
+
 
 ## 参考文档
 mybatis中文文档：https://mybatis.net.cn/getting-started.html

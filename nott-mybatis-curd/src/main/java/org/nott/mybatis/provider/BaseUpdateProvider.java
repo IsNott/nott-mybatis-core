@@ -18,5 +18,4 @@ public class BaseUpdateProvider {
         return SqlBuilder.buildUpdateByIdSql(mybatisSqlBean,map.get("entity"));
     }
 
-
 }

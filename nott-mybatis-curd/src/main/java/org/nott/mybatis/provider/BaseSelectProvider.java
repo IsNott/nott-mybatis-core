@@ -10,38 +10,39 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * 基础mybatis selectProvider
+ * 基础 mybatis selectProvider
  */
 public class BaseSelectProvider {
 
-    public static String selectById(Map<String,Serializable> map){
+    public static String selectById(Map<String, Serializable> map) {
         Serializable id = map.get("id");
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         return SqlBuilder.buildFindByPkSql(bean, id);
     }
 
-    public static String selectOne(){
+    public static String selectOne() {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         QuerySqlConditionBuilder.build().limit(1);
-        return SqlBuilder.buildSql(bean,null);
+        return SqlBuilder.buildSql(bean, null);
     }
 
-    public static String selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder){
+    public static String selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         querySqlConditionBuilder.setLimit(1);
         return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 
-    public static String selectList(){
+    public static String selectList() {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
-        return SqlBuilder.buildSql(bean,null);
+        return SqlBuilder.buildSql(bean, null);
     }
 
-    public static String selectListByCondition(QuerySqlConditionBuilder querySqlConditionBuilder){
+    public static String selectListByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 
+    // TODO 分页修改
     public static String pageCountByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         return SqlBuilder.buildPageCount(bean, querySqlConditionBuilder);
@@ -52,7 +53,7 @@ public class BaseSelectProvider {
         return SqlBuilder.buildPageCount(bean, null);
     }
 
-    // Page select
+    // TODO Page select
     public static String page(Map<String, Object> param) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         QuerySqlConditionBuilder builder = param.containsKey("querySqlConditionBuilder") ? (QuerySqlConditionBuilder) param.get("querySqlConditionBuilder") : null;

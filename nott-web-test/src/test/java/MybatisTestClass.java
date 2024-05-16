@@ -2,6 +2,7 @@
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
+import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.model.InSelect;
 import org.nott.web.entity.User;
@@ -10,6 +11,7 @@ import org.nott.web.mapper.UserMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -106,4 +108,37 @@ public class MybatisTestClass {
         System.out.println(affectRow);
     }
 
+    @Test
+    public void testIssues10(){
+        Page<User> userPage = userMapper.pageCount();
+        System.out.println(userPage);
+    }
+
+    @Test
+    public void testIssues11(){
+        Page<User> userPage = userMapper.page(1,10,null);
+        System.out.println(userPage);
+    }
+
+    @Test
+    public void testIssues12(){
+        User user = new User();
+        user.setId("123435345");
+        user.setName("naem");
+        user.setAge(12);
+        int insert = userMapper.insert(user);
+        System.out.println(insert);
+    }
+
+    @Test
+    public void testIssues13(){
+        int result = userMapper.deleteById("123435345");
+        System.out.println(result);
+    }
+
+    @Test
+    public void testIssues14(){
+        int result = userMapper.deleteByIds(Arrays.asList("123435345"));
+        System.out.println(result);
+    }
 }

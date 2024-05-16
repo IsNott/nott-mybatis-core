@@ -42,4 +42,9 @@ public class MybatisSqlBean {
      */
     private Class<?> originalBeanClass;
 
+    /**
+     * 分页对象
+     */
+    private Page<?> page;
+
 }
