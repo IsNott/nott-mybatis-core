@@ -25,4 +25,6 @@ public class DataSourceConfig {
     private String type;
 
     private HikariDataSourceConfig hikari;
+
+    private DruidDataSourceConfig druid;
 }

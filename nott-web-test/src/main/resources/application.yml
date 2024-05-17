@@ -11,12 +11,17 @@ nott:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
+#    type: com.zaxxer.hikari.HikariDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
     hikari:
       minimum-idle: 0
       maximum-pool-size: 20
       idle-timeout: 10000
       connection-test-query: select 1
+      poolName: nott-hikari
+    druid:
+      name: nott-druid
+
 
 
 

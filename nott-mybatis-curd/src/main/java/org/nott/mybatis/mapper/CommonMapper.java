@@ -28,10 +28,10 @@ public interface CommonMapper<T> {
     public List<T> selectList();
 
     @SelectProvider(type = BaseSelectProvider.class, method = "pageCount")
-    public Page<T> pageCount();
+    public Long count();
 
     @SelectProvider(type = BaseSelectProvider.class, method = "pageCountByCondition")
-    public Page<T> pageCountByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
+    public Long countByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
 
     @SelectProvider(type = BaseSelectProvider.class, method = "page")
     public Page<T> page(Integer page, Integer size, QuerySqlConditionBuilder querySqlConditionBuilder);

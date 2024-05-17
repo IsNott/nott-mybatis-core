@@ -1,6 +1,7 @@
 package org.nott.mybatis.exception;
 
 /**
+ * SQL构造器异常
  * @author Nott
  * @date 2024-5-16
  */
