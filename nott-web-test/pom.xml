@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>nott-mybatis-core</artifactId>
-        <groupId>org.nott</groupId>
+        <groupId>io.github.isnott</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -26,7 +26,7 @@
 <!--        </dependency>-->
 
         <dependency>
-            <groupId>org.nott</groupId>
+            <groupId>io.github.isnott</groupId>
             <artifactId>nott-mybatis-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -70,7 +70,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.nott</groupId>
+            <groupId>io.github.isnott</groupId>
             <artifactId>nott-mybatis-dynamic-datasource</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
