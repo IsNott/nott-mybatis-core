@@ -16,10 +16,23 @@ public class Page<T> {
 
     private Long totalResult;
 
-    private Integer totalPage = 0;
+    private Long totalPage = 0L;
 
     private Integer currentPage = 1;
 
     private Integer size = 10;
 
+    public Page(Integer currentPage, Integer size) {
+        if (currentPage > 0) {
+            this.currentPage = currentPage;
+        }
+        if (size > 0) {
+            this.size = size;
+        }
+    }
+
+    public void setTotalResult(Long totalResult) {
+        this.totalResult = totalResult;
+        this.totalPage = (this.totalResult % this.size == 0) ? this.totalResult / this.size : this.totalResult / this.size + 1;
+    }
 }

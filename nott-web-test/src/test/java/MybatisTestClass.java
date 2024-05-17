@@ -10,6 +10,7 @@ import org.nott.mybatis.sql.model.InSelect;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
 
+import org.nott.web.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -27,6 +28,9 @@ import java.util.List;
 public class MybatisTestClass {
 
     private ClassPathXmlApplicationContext context;
+
+    @Resource
+    private UserService userService;
 
     @Resource
     private UserMapper userMapper;
@@ -112,14 +116,13 @@ public class MybatisTestClass {
 
     @Test
     public void testIssues10(){
-        Page<User> userPage = userMapper.pageCount();
-        System.out.println(userPage);
+        System.out.println(userMapper.count());
     }
 
     @Test
     public void testIssues11(){
-        Page<User> userPage = userMapper.page(1,10,null);
-        System.out.println(userPage);
+        Page page = userService.page(new Page<User>(1,10));
+        System.out.println(page);
     }
 
     @Test

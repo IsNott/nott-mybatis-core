@@ -2,6 +2,7 @@ package org.nott.mybatis.provider;
 
 
 import org.nott.mybatis.model.MybatisSqlBean;
+import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.SqlBuilder;
 import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
@@ -53,12 +54,12 @@ public class BaseSelectProvider {
         return SqlBuilder.buildPageCount(bean, null);
     }
 
-    // TODO Page select
+    // Page select
     public static String page(Map<String, Object> param) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         QuerySqlConditionBuilder builder = param.containsKey("querySqlConditionBuilder") ? (QuerySqlConditionBuilder) param.get("querySqlConditionBuilder") : null;
-        Integer page = (Integer) param.get("page");
-        Integer size = (Integer) param.get("size");
+        int size = (int) param.get("size");
+        int page = (int) param.get("page");
         return SqlBuilder.buildPage(page, size, bean, builder);
     }
 }

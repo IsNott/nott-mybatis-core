@@ -7,6 +7,7 @@ import org.nott.mybatis.provider.BaseInsertProvider;
 import org.nott.mybatis.provider.BaseSelectProvider;
 import org.nott.mybatis.provider.BaseUpdateProvider;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.List;
  *
  * @param <T>
  */
+
+@Component
 public interface CommonMapper<T> {
 
     @SelectProvider(type = BaseSelectProvider.class, method = "selectById")
@@ -34,7 +37,7 @@ public interface CommonMapper<T> {
     public Long countByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
 
     @SelectProvider(type = BaseSelectProvider.class, method = "page")
-    public Page<T> page(Integer page, Integer size, QuerySqlConditionBuilder querySqlConditionBuilder);
+    public List<T> page(int page,int size, QuerySqlConditionBuilder querySqlConditionBuilder);
 
     @SelectProvider(type = BaseSelectProvider.class, method = "selectOneByCondition")
     public T selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);

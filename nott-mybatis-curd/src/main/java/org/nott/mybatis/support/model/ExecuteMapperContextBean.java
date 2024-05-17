@@ -1,6 +1,7 @@
 package org.nott.mybatis.support.model;
 
 import lombok.Data;
+import org.nott.mybatis.model.Page;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

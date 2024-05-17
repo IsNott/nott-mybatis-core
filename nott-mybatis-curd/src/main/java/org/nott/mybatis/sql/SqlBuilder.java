@@ -8,6 +8,7 @@ import org.nott.mybatis.annotations.TableId;
 import org.nott.mybatis.constant.SQLConstant;
 import org.nott.mybatis.exception.SqlParseException;
 import org.nott.mybatis.model.MybatisSqlBean;
+import org.nott.mybatis.model.Page;
 import org.nott.mybatis.model.Pk;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlDDLOption;
@@ -147,7 +148,8 @@ public class SqlBuilder {
 
     /**
      * 变量加入"%"通配符
-     * @param mode like模式枚举
+     *
+     * @param mode  like模式枚举
      * @param value 参与搜索的变量
      * @return 加入通配符后的变量
      */
@@ -155,7 +157,7 @@ public class SqlBuilder {
         switch (mode) {
             default -> value = value;
             case ALL -> value = SQLConstant.PERCENTAGE + value + SQLConstant.PERCENTAGE;
-            case BEFORE -> value = SQLConstant.PERCENTAGE+ value;
+            case BEFORE -> value = SQLConstant.PERCENTAGE + value;
             case AFTER -> value = value + SQLConstant.PERCENTAGE;
         }
         return value;
@@ -337,6 +339,7 @@ public class SqlBuilder {
         SQL sql = buildMybatisSqlEntity(bean, Objects.isNull(builder) ? new QuerySqlConditionBuilder() : builder);
         sql.LIMIT(size);
         sql.OFFSET(size * (page - 1));
+        System.out.println("page sql: " + sql.toString());
         return sql.toString();
     }
 
