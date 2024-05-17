@@ -4,21 +4,49 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.nott</groupId>
+    <groupId>io.github.isnott</groupId>
     <artifactId>nott-mybatis-core</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <modules>
         <module>nott-web-test</module>
         <module>nott-mybatis-curd</module>
         <module>nott-mybatis-dynamic-datasource</module>
     </modules>
 
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Personal use mybatis common package.</description>
+    <url>https://github.com/IsNott/nott-mybatis-core</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>IsNott</name>
+            <email>isnott1028@outlook.com</email>
+            <organization>Nott</organization>
+            <organizationUrl>https://github.com/IsNott</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:https://github.com/IsNott/nott-mybatis-core.git</connection>
+        <developerConnection>scm:git@github.com:IsNott/nott-mybatis-core.git</developerConnection>
+        <url>https://github.com/IsNott/nott-mybatis-core</url>
+    </scm>
+
+
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
         <mybatis.version>3.5.11</mybatis.version>
         <mysql-connectorj.version>8.3.0</mysql-connectorj.version>
+        <cust-java-home>C:\Program Files\Java\jdk-17</cust-java-home>
     </properties>
 
     <parent>
@@ -172,10 +200,67 @@
                 <version>1.2.21</version>
             </dependency>
 
-
-
-
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                    <javadocExecutable>${cust-java-home}\bin\javadoc</javadocExecutable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>

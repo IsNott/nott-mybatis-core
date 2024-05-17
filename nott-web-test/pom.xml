@@ -4,16 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>nott-mybatis-core</artifactId>
-        <groupId>org.nott</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>io.github.isnott</groupId>
+        <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>web</artifactId>
 
+
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
 
@@ -26,9 +28,9 @@
 <!--        </dependency>-->
 
         <dependency>
-            <groupId>org.nott</groupId>
+            <groupId>io.github.isnott</groupId>
             <artifactId>nott-mybatis-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
         <dependency>
@@ -70,9 +72,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.nott</groupId>
+            <groupId>io.github.isnott</groupId>
             <artifactId>nott-mybatis-dynamic-datasource</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
 
