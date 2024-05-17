@@ -31,6 +31,13 @@
 
 ## 使用说明
 参考项目web模块test文件夹下的单元测试方法。
+自定义service实现类继承ICommonService<T>获取service方法
+```java
+@Service
+public class UserService<User> extends ICommonService<User> {
+
+}
+```
 
 自定义mapper可直接获取CommonMapper基础方法
 ```java
@@ -38,9 +45,6 @@ public interface UserMapper extends CommonMapper<User> {}
 ```
 
 ## 功能
-
-update on：2024-5-14 
-
 使用aop支持Select基础方法（selectById、selectOne）、
 单表查询条件构造器
 
@@ -81,14 +85,22 @@ public interface SqlQuery {
 }
 ```
 
-update on：2024-5-16
-
 Update、Delete、Insert基础方法
 ```
 int affectRow = userMapper.updateById(user);
 int affectRow = userMapper.insert(user);
 int affectRow = userMapper.deleteById("123435345");
 int affectRow = userMapper.deleteByIds(Arrays.asList("123435345"));
+```
+
+
+Service封装mapper基础方法、分页方法，详细见CommonService文件
+```
+...
+Page<T> page(Page<T> page);
+
+Page<T> page(Page<T> page, QuerySqlConditionBuilder querySqlConditionBuilder);
+...
 ```
 
 

@@ -1,6 +1,6 @@
 package org.nott.web.service;
 
-import org.nott.mybatis.dao.CommonDAO;
+import org.nott.mybatis.service.impl.ICommonService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class UserService<User> extends CommonDAO<User>{
+public class UserService<User> extends ICommonService<User> {
 
 }
