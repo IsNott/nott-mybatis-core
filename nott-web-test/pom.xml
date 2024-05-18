@@ -5,7 +5,7 @@
     <parent>
         <artifactId>nott-mybatis-core</artifactId>
         <groupId>io.github.isnott</groupId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,18 +20,6 @@
 
 
     <dependencies>
-
-<!--        <dependency>-->
-<!--            <groupId>junit</groupId>-->
-<!--            <artifactId>junit</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-        <dependency>
-            <groupId>io.github.isnott</groupId>
-            <artifactId>nott-mybatis-core</artifactId>
-            <version>0.0.1</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -71,10 +59,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>io.github.isnott</groupId>-->
+<!--            <artifactId>nott-mybatis-dynamic-datasource</artifactId>-->
+<!--            <version>0.0.1</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>io.github.isnott</groupId>
-            <artifactId>nott-mybatis-dynamic-datasource</artifactId>
-            <version>0.0.1</version>
+            <artifactId>nott-mybatis-core</artifactId>
+            <version>${nott-maybaits.version}</version>
         </dependency>
 
 

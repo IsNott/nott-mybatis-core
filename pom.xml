@@ -7,13 +7,15 @@
     <groupId>io.github.isnott</groupId>
     <artifactId>nott-mybatis-core</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.3</version>
     <modules>
         <module>nott-web-test</module>
-        <module>nott-mybatis-curd</module>
+        <module>nott-mybatis-orm</module>
         <module>nott-mybatis-dynamic-datasource</module>
     </modules>
 
+
+<!--    这里可以自定义名称也可以按这样写通配符-->
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Personal use mybatis common package.</description>
     <url>https://github.com/IsNott/nott-mybatis-core</url>
@@ -47,6 +49,7 @@
         <mybatis.version>3.5.11</mybatis.version>
         <mysql-connectorj.version>8.3.0</mysql-connectorj.version>
         <cust-java-home>C:\Program Files\Java\jdk-17</cust-java-home>
+        <nott-maybaits.version>0.0.3</nott-maybaits.version>
     </properties>
 
     <parent>

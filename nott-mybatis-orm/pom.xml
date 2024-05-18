@@ -5,12 +5,11 @@
     <parent>
         <artifactId>nott-mybatis-core</artifactId>
         <groupId>io.github.isnott</groupId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>nott-mybatis-curd</artifactId>
-    <name>nott-mybatis-curd</name>
+    <artifactId>nott-mybatis-orm</artifactId>
+    <name>nott-mybatis-orm</name>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
