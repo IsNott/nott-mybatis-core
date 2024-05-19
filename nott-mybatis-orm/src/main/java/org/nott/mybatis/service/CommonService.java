@@ -2,8 +2,8 @@ package org.nott.mybatis.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.nott.mybatis.model.Page;
-import org.nott.mybatis.sql.QuerySqlConditionBuilder;
-import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,16 +1,13 @@
-package org.nott.mybatis.support.Interceptor;
+package org.nott.mybatis.support.aop.Interceptor;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.nott.mybatis.model.Page;
-import org.nott.mybatis.support.model.ExecuteMapperContextBean;
+import org.nott.mybatis.support.aop.model.ExecuteMapperContextBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Objects;
 
 

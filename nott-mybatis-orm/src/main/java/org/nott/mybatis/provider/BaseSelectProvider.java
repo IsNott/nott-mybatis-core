@@ -2,9 +2,8 @@ package org.nott.mybatis.provider;
 
 
 import org.nott.mybatis.model.MybatisSqlBean;
-import org.nott.mybatis.model.Page;
-import org.nott.mybatis.sql.QuerySqlConditionBuilder;
-import org.nott.mybatis.sql.SqlBuilder;
+import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlBuilder;
 import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
 
 import java.io.Serializable;

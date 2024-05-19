@@ -1,7 +1,6 @@
 package org.nott.mybatis.sql.interfaces;
 
-import org.nott.mybatis.sql.SqlConditionBuilder;
-import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlConditionBuilder;
 
 public interface SqlUpdate {
 

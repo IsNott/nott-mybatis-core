@@ -5,9 +5,7 @@ import org.nott.mybatis.provider.BaseDeleteProvider;
 import org.nott.mybatis.provider.BaseInsertProvider;
 import org.nott.mybatis.provider.BaseSelectProvider;
 import org.nott.mybatis.provider.BaseUpdateProvider;
-import org.nott.mybatis.sql.QuerySqlConditionBuilder;
-import org.nott.mybatis.sql.SqlConditionBuilder;
-import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlConditionBuilder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

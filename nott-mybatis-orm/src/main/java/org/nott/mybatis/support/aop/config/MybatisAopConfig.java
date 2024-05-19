@@ -1,4 +1,4 @@
-package org.nott.mybatis.support.config;
+package org.nott.mybatis.support.aop.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

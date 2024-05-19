@@ -1,8 +1,6 @@
 package org.nott.mybatis.sql.interfaces;
 
-import org.nott.mybatis.sql.Builder;
-import org.nott.mybatis.sql.QuerySqlConditionBuilder;
-import org.nott.mybatis.sql.SqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlConditionBuilder;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlOperator;
 import org.nott.mybatis.sql.model.InLike;

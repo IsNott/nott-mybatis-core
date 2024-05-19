@@ -1,4 +1,4 @@
-package org.nott.mybatis.support.model;
+package org.nott.mybatis.support.aop.model;
 
 import lombok.Data;
 import org.nott.mybatis.model.Page;

@@ -1,14 +1,8 @@
-package org.nott.mybatis.sql;
+package org.nott.mybatis.sql.builder;
 
 import lombok.Data;
 import org.nott.mybatis.exception.MethodNotAllowException;
-import org.nott.mybatis.sql.interfaces.SqlUpdate;
-import org.nott.mybatis.sql.model.Colum;
 import org.nott.mybatis.sql.model.InSelect;
-import org.nott.mybatis.sql.model.UpdateCombination;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Nott

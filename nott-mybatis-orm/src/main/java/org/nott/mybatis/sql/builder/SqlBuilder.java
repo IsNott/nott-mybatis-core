@@ -1,4 +1,4 @@
-package org.nott.mybatis.sql;
+package org.nott.mybatis.sql.builder;
 
 import com.google.common.base.CaseFormat;
 import org.apache.commons.lang3.ArrayUtils;
@@ -8,7 +8,6 @@ import org.nott.mybatis.annotations.TableId;
 import org.nott.mybatis.constant.SQLConstant;
 import org.nott.mybatis.exception.SqlParseException;
 import org.nott.mybatis.model.MybatisSqlBean;
-import org.nott.mybatis.model.Page;
 import org.nott.mybatis.model.Pk;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlDDLOption;

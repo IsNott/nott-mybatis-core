@@ -1,9 +1,9 @@
-package org.nott.mybatis.support.configuration;
+package org.nott.mybatis.support.aop.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.aopalliance.intercept.Interceptor;
-import org.nott.mybatis.support.Interceptor.MybatisAopInterceptor;
-import org.nott.mybatis.support.config.MybatisAopConfig;
+import org.nott.mybatis.support.aop.Interceptor.MybatisAopInterceptor;
+import org.nott.mybatis.support.aop.config.MybatisAopConfig;
 import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

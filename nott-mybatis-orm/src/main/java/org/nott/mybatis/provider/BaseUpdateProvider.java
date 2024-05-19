@@ -1,8 +1,8 @@
 package org.nott.mybatis.provider;
 
 import org.nott.mybatis.model.MybatisSqlBean;
-import org.nott.mybatis.sql.SqlBuilder;
-import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlBuilder;
+import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
 import java.util.Map;
 
