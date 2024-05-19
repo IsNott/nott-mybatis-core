@@ -1,6 +1,7 @@
 package org.nott.mybatis.provider;
 
 import org.nott.mybatis.model.MybatisSqlBean;
+import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.SqlBuilder;
 import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
 
@@ -24,5 +25,10 @@ public class BaseDeleteProvider {
         List<?> ids = param.get("ids");
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         return SqlBuilder.buildDeleteListSql(bean, ids);
+    }
+
+    public static String deleteByCondition(DeleteSqlConditionBuilder deleteSqlConditionBuilder){
+        MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
+        return SqlBuilder.buildDeleteSql(bean,deleteSqlConditionBuilder);
     }
 }

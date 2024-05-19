@@ -353,4 +353,11 @@ public class SqlBuilder {
         System.out.println(sql.toString());
         return sql.toString();
     }
+
+    public static String buildDeleteSql(MybatisSqlBean bean, DeleteSqlConditionBuilder deleteSqlConditionBuilder) {
+        SQL sql = generateBaseSql(bean, true);
+        buildWhereSql(sql, deleteSqlConditionBuilder.getSqlConditions());
+        System.out.println("Generate Delete sql:" + sql.toString());
+        return sql.toString();
+    }
 }

@@ -4,6 +4,7 @@ import org.nott.mybatis.exception.OrmOperateException;
 import org.nott.mybatis.service.CommonService;
 import org.nott.mybatis.mapper.CommonMapper;
 import org.nott.mybatis.model.Page;
+import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,15 @@ public class ICommonService<T> implements CommonService<T> {
             return true;
         }
         throw new OrmOperateException("RemoveByIds method failed.");
+    }
+
+    @Override
+    public int delete(DeleteSqlConditionBuilder deleteSqlConditionBuilder) {
+        int deletedRow = commonMapper.deleteByCondition(deleteSqlConditionBuilder);
+        if(deletedRow > 0){
+            return deletedRow;
+        }
+        throw new OrmOperateException("Delete method failed.");
     }
 
     @Override

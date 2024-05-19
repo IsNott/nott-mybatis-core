@@ -1,28 +1,14 @@
 package org.nott.mybatis.sql.builder;
 
-import lombok.Data;
-import org.nott.mybatis.exception.MethodNotSupportException;
 import org.nott.mybatis.sql.enums.SqlDDLOption;
-import org.nott.mybatis.sql.model.InSelect;
 
-/**
- * @author Nott
- * @date 2024-5-15
- */
+public class DeleteSqlConditionBuilder extends Builder {
 
-@Data
-public class UpdateSqlConditionBuilder extends Builder {
-
-    private static final SqlDDLOption OPT = SqlDDLOption.UPDATE;
-
-    public static UpdateSqlConditionBuilder build(){
-        return new UpdateSqlConditionBuilder();
+    public static DeleteSqlConditionBuilder build(){
+        return new DeleteSqlConditionBuilder();
     }
 
-    @Override
-    public Builder select(InSelect... selects) {
-        return super.methodNotSupport(OPT,"select");
-    }
+    private static final SqlDDLOption OPT = SqlDDLOption.DELETE;
 
     @Override
     public Builder limit(Integer value) {
@@ -42,7 +28,7 @@ public class UpdateSqlConditionBuilder extends Builder {
     @Override
     public Builder orderByAsc(String... colum) {
         return super.methodNotSupport(OPT,"orderBy");
-    }
+        }
 
     @Override
     public Builder groupBy(String... colum) {

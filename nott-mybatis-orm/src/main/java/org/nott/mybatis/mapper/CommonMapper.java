@@ -60,4 +60,7 @@ public interface CommonMapper<T> {
 
     @DeleteProvider(type = BaseDeleteProvider.class, method = "deleteByIds")
     int deleteByIds(@Param("ids") List ids);
+
+    @DeleteProvider(type = BaseDeleteProvider.class, method = "deleteByCondition")
+    int deleteByCondition(SqlConditionBuilder deleteConditionBuilder);
 }

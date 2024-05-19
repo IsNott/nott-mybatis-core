@@ -3,6 +3,7 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
 import org.nott.mybatis.model.Page;
+import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 import org.nott.mybatis.sql.enums.LikeMode;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
 public class MybatisTestClass {
 
     private ClassPathXmlApplicationContext context;
@@ -37,21 +38,21 @@ public class MybatisTestClass {
     private UserMapper userMapper;
 
     public ClassPathXmlApplicationContext getContext() {
-        if(context == null){
+        if (context == null) {
             context = new ClassPathXmlApplicationContext("spring-context.xml");
         }
         return context;
     }
 
     @Test
-    public void testIssues01(){
+    public void testIssues01() {
         String id = "410544b2-4001-4271-9855-fec4b6a6442a";
         User user = userMapper.selectUser(id);
         System.out.println(user);
     }
 
     @Test
-    public void testIssues02(){
+    public void testIssues02() {
         String email = "test";
         email = "%" + email + "%";
         User singleColumUser = userMapper.selectUserByEmail(email);
@@ -59,7 +60,7 @@ public class MybatisTestClass {
     }
 
     @Test
-    public void testIssues03(){
+    public void testIssues03() {
         String name = "you";
         String orderBy = "id";
         name = "%" + name + "%";
@@ -70,44 +71,45 @@ public class MybatisTestClass {
 
 
     @Test
-    public void testIssues04(){
+    public void testIssues04() {
         List<User> users = userMapper.selectList();
         System.out.println(users);
     }
 
     @Test
-    public void testIssues05(){
+    public void testIssues05() {
         User user = userMapper.selectOneByCondition(
                 QuerySqlConditionBuilder.build()
-                        .eq("name","youKnowWho")
+                        .eq("name", "youKnowWho")
         );
         System.out.println(user);
     }
 
     @Test
-    public void testIssues06(){
+    public void testIssues06() {
         User user = userMapper.selectOneByCondition(
                 QuerySqlConditionBuilder.build()
-                        .eq("name","youKnowWho")
+                        .eq("name", "youKnowWho")
                         .select(InSelect.colum("name").as("test")));
         ;
         System.out.println(user);
     }
 
     @Test
-    public void testIssues07(){
-        User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().le("age",32));
+    public void testIssues07() {
+        User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().le("age", 32));
         ;
         System.out.println(user);
     }
+
     @Test
-    public void testIssues08(){
+    public void testIssues08() {
         User user = userMapper.selectById("410544b2-4001-4271-9855-fec4b62350b");
         System.out.println(user);
     }
 
     @Test
-    public void testIssues09(){
+    public void testIssues09() {
         User user = new User();
         user.setId("410544b2-4001-4271-9855-fec4b62350b");
         user.setName("mybatis-test1");
@@ -116,18 +118,18 @@ public class MybatisTestClass {
     }
 
     @Test
-    public void testIssues10(){
+    public void testIssues10() {
         System.out.println(userMapper.count());
     }
 
     @Test
-    public void testIssues11(){
-        Page page = userService.page(new Page<User>(1,10));
+    public void testIssues11() {
+        Page page = userService.page(new Page<User>(1, 10));
         System.out.println(page);
     }
 
     @Test
-    public void testIssues12(){
+    public void testIssues12() {
         User user = new User();
         user.setId("123435345");
         user.setName("naem");
@@ -137,19 +139,19 @@ public class MybatisTestClass {
     }
 
     @Test
-    public void testIssues13(){
+    public void testIssues13() {
         int result = userMapper.deleteById("123435345");
         System.out.println(result);
     }
 
     @Test
-    public void testIssues14(){
+    public void testIssues14() {
         int result = userMapper.deleteByIds(Arrays.asList("123435345"));
         System.out.println(result);
     }
 
     @Test
-    public void testIssues15(){
+    public void testIssues15() {
         User user = userMapper.selectOneByCondition(
                 QuerySqlConditionBuilder.build().like(InLike.choose("name", "you", LikeMode.AFTER))
         );
@@ -157,20 +159,20 @@ public class MybatisTestClass {
     }
 
     @Test
-    public void testIssues16(){
+    public void testIssues16() {
         User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().like("name", "you", LikeMode.AFTER));
         System.out.println(user);
     }
 
     @Test
-    public void testIssues17(){
+    public void testIssues17() {
         User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().like("id", "1", LikeMode.ALL)
-                .orderByAsc("id","name"));
+                .orderByAsc("id", "name"));
         System.out.println(user);
     }
 
     @Test
-    public void testIssues18(){
+    public void testIssues18() {
         User user = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build()
                 .like("id", "1", LikeMode.ALL)
                 .orderByAsc("id").orderByDesc("email"));
@@ -178,7 +180,7 @@ public class MybatisTestClass {
     }
 
     @Test
-    public void testIssues19(){
+    public void testIssues19() {
         User user = userMapper.selectOneByCondition(
                 QuerySqlConditionBuilder.build()
                         .select(InSelect.colum("name"))
@@ -189,23 +191,29 @@ public class MybatisTestClass {
     }
 
     @Test
-    public void testIssues20(){
+    public void testIssues20() {
         User user = new User();
         user.setId("410544b2-4001-4271-9855-fec4b6a6442a");
         user.setName("134");
         int row = userMapper.updateByCondition(
                 UpdateSqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b6a6442a")
-                        .set("name","test")
-                        );
+                        .set("name", "test")
+        );
         System.out.println(row);
     }
 
     @Test
-    public void testIssues21(){
+    public void testIssues21() {
         User user = new User();
         user.setId("410544b2-4001-4271-9855-fec4b6a6442a");
         user.setName("134");
         Object o = userService.updateById(user);
+        System.out.println(o);
+    }
+
+    @Test
+    public void testIssues22() {
+        int o = userMapper.deleteByCondition(DeleteSqlConditionBuilder.build().eq("age", 1));
         System.out.println(o);
     }
 }

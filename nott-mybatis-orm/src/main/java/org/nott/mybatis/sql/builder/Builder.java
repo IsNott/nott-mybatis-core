@@ -2,8 +2,10 @@ package org.nott.mybatis.sql.builder;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.nott.mybatis.exception.MethodNotSupportException;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.OrderMode;
+import org.nott.mybatis.sql.enums.SqlDDLOption;
 import org.nott.mybatis.sql.enums.SqlOperator;
 import org.nott.mybatis.sql.interfaces.SqlQuery;
 import org.nott.mybatis.sql.interfaces.SqlUpdate;
@@ -34,6 +36,12 @@ public abstract class Builder implements SqlQuery, SqlConditionBuilder, SqlUpdat
     private String alias;
 
     private Integer limit;
+
+    protected Builder methodNotSupport(SqlDDLOption option, String method) {
+        throw new MethodNotSupportException(String.format(
+                "%s option not allow to call %s method.", option.name(), method
+        ));
+    }
 
     @Override
     public Builder eq(String colum, Object val) {
