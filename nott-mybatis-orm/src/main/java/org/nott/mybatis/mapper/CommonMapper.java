@@ -6,6 +6,8 @@ import org.nott.mybatis.provider.BaseInsertProvider;
 import org.nott.mybatis.provider.BaseSelectProvider;
 import org.nott.mybatis.provider.BaseUpdateProvider;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.SqlConditionBuilder;
+import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -32,22 +34,25 @@ public interface CommonMapper<T> {
     List<T> selectList();
 
     @SelectProvider(type = BaseSelectProvider.class, method = "selectListByCondition")
-    List<T> selectListByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
+    List<T> selectListByCondition(SqlConditionBuilder querySqlConditionBuilder);
 
     @SelectProvider(type = BaseSelectProvider.class, method = "pageCount")
     Long count();
 
     @SelectProvider(type = BaseSelectProvider.class, method = "pageCountByCondition")
-    Long countByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
+    Long countByCondition(SqlConditionBuilder querySqlConditionBuilder);
 
     @SelectProvider(type = BaseSelectProvider.class, method = "page")
-    List<T> page(int page,int size, QuerySqlConditionBuilder querySqlConditionBuilder);
+    List<T> page(int page,int size, SqlConditionBuilder querySqlConditionBuilder);
 
     @SelectProvider(type = BaseSelectProvider.class, method = "selectOneByCondition")
-    T selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder);
+    T selectOneByCondition(SqlConditionBuilder querySqlConditionBuilder);
 
     @UpdateProvider(type = BaseUpdateProvider.class, method = "updateById")
     int updateById(@Param("entity") T t);
+
+    @UpdateProvider(type = BaseUpdateProvider.class, method = "updateByCondition")
+    int updateByCondition(SqlConditionBuilder updateSqlConditionBuilder);
 
     @InsertProvider(type = BaseInsertProvider.class, method = "insert")
     int insert(@Param("entity") T t);

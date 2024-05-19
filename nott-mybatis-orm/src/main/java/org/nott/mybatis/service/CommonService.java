@@ -3,6 +3,7 @@ package org.nott.mybatis.service;
 import org.apache.ibatis.annotations.Param;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,13 +29,15 @@ public interface CommonService<T> {
 
     T getOne(QuerySqlConditionBuilder querySqlConditionBuilder);
 
-    int save(T t);
+    T save(T t);
 
-    int removeById(Serializable id);
+    boolean removeById(Serializable id);
 
-    int removeByIds(@Param("ids") List ids);
+    boolean removeByIds(@Param("ids") List ids);
 
-    int updateById(@Param("entity") T t);
+    T updateById(@Param("entity") T t);
+
+    boolean update(UpdateSqlConditionBuilder updateSqlConditionBuilder);
 
 
 }

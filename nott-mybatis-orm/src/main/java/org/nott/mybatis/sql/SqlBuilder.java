@@ -193,7 +193,8 @@ public class SqlBuilder {
         String valStr = value.toString();
         valStr = (String) reassembleValue(valStr);
         Pk pk = bean.getPk();
-        QuerySqlConditionBuilder builder = QuerySqlConditionBuilder.build().eq(pk.getName(), valStr);
+        QuerySqlConditionBuilder builder = QuerySqlConditionBuilder.build();
+        builder.setSqlConditions(Arrays.asList(SqlConditions.basicBuilder().value(valStr).colum(pk.getName()).build()));
         return buildSql(bean, builder);
     }
 
@@ -219,7 +220,7 @@ public class SqlBuilder {
 
         SQL sql = buildUpdateSql(mybatisSqlBean);
         buildSetSql(entity, sql, SqlDDLOption.UPDATE);
-        buildSingleWhereSql(sql, SqlConditions.builder().colum(pk.getName()).sqlOperator(SqlOperator.EQ).value(pkValue).build());
+        buildSingleWhereSql(sql, SqlConditions.basicBuilder().colum(pk.getName()).sqlOperator(SqlOperator.EQ).value(pkValue).build());
         return sql.toString();
     }
 
@@ -252,13 +253,13 @@ public class SqlBuilder {
     public static String buildDeleteByPkSql(MybatisSqlBean mybatisSqlBean, Serializable value) {
         SQL sql = generateBaseSql(mybatisSqlBean, true);
         Object valueObj = (Object) reassembleValue(value);
-        buildSingleWhereSql(sql, SqlConditions.builder().colum(mybatisSqlBean.getPk().getName()).sqlOperator(SqlOperator.EQ).value(valueObj).build());
+        buildSingleWhereSql(sql, SqlConditions.basicBuilder().colum(mybatisSqlBean.getPk().getName()).sqlOperator(SqlOperator.EQ).value(valueObj).build());
         return sql.toString();
     }
 
     public static String buildDeleteListSql(MybatisSqlBean mybatisSqlBean, List ids) {
         SQL sql = generateBaseSql(mybatisSqlBean, true);
-        buildSingleWhereSql(sql, SqlConditions.builder().colum(mybatisSqlBean.getPk().getName()).sqlOperator(SqlOperator.IN).value(ids).build());
+        buildSingleWhereSql(sql, SqlConditions.basicBuilder().colum(mybatisSqlBean.getPk().getName()).sqlOperator(SqlOperator.IN).value(ids).build());
         return sql.toString();
     }
 
@@ -321,10 +322,12 @@ public class SqlBuilder {
             String key = updateCombination.getKey();
             Object combinationValue = updateCombination.getValue();
             combinationValue = reassembleValue(combinationValue);
-            sql.SET(key + SqlOperator.EQ + combinationValue);
+            sql.SET(key + SqlOperator.EQ.getValue() + combinationValue);
         }
-//        sql.WHERE(pk.getName() + SqlOperator.EQ + valStr);
 
+        buildWhereSql(sql, updateSqlConditionBuilder.getSqlConditions());
+//        sql.WHERE(pk.getName() + SqlOperator.EQ + valStr);
+        System.out.println("Generate update sql:" + sql.toString());
         return sql.toString();
     }
 

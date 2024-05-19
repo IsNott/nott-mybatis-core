@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.nott.Application;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.model.InLike;
 import org.nott.mybatis.sql.model.InSelect;
@@ -185,5 +186,26 @@ public class MybatisTestClass {
                         .orderByAsc("name")
                         .groupBy("name"));
         System.out.println(user);
+    }
+
+    @Test
+    public void testIssues20(){
+        User user = new User();
+        user.setId("410544b2-4001-4271-9855-fec4b6a6442a");
+        user.setName("134");
+        int row = userMapper.updateByCondition(
+                UpdateSqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b6a6442a")
+                        .set("name","test")
+                        );
+        System.out.println(row);
+    }
+
+    @Test
+    public void testIssues21(){
+        User user = new User();
+        user.setId("410544b2-4001-4271-9855-fec4b6a6442a");
+        user.setName("134");
+        Object o = userService.updateById(user);
+        System.out.println(o);
     }
 }

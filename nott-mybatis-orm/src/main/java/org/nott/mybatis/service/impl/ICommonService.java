@@ -1,12 +1,15 @@
 package org.nott.mybatis.service.impl;
 
+import org.nott.mybatis.exception.OrmOperateException;
 import org.nott.mybatis.service.CommonService;
 import org.nott.mybatis.mapper.CommonMapper;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.QuerySqlConditionBuilder;
+import org.nott.mybatis.sql.UpdateSqlConditionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 
 @Component
 @Scope("prototype")
+@Transactional(rollbackFor = OrmOperateException.class)
 public class ICommonService<T> implements CommonService<T> {
 
     @Autowired
@@ -65,22 +69,41 @@ public class ICommonService<T> implements CommonService<T> {
     }
 
     @Override
-    public int save(T t) {
-        return commonMapper.insert(t);
+    public T save(T t) {
+        int insert = commonMapper.insert(t);
+        if(insert > 0){
+            return t;
+        }
+        throw new OrmOperateException("Save method failed.");
     }
 
     @Override
-    public int removeById(Serializable id) {
-        return commonMapper.deleteById(id);
+    public boolean removeById(Serializable id) {
+        return commonMapper.deleteById(id) > 0;
     }
 
     @Override
-    public int removeByIds(List ids) {
-        return commonMapper.deleteByIds(ids);
+    public boolean removeByIds(List ids) {
+        if (commonMapper.deleteByIds(ids) == ids.size()) {
+            return true;
+        }
+        throw new OrmOperateException("RemoveByIds method failed.");
     }
 
     @Override
-    public int updateById(T t) {
-        return commonMapper.updateById(t);
+    public T updateById(T t) {
+        int updated = commonMapper.updateById(t);
+        if(updated > 0){
+            return t;
+        }
+        throw new OrmOperateException("UpdateById method failed.");
+    }
+
+    @Override
+    public boolean update(UpdateSqlConditionBuilder updateSqlConditionBuilder) {
+        if (commonMapper.updateByCondition(updateSqlConditionBuilder) > 0) {
+            return true;
+        }
+        throw new OrmOperateException("Update method failed.");
     }
 }

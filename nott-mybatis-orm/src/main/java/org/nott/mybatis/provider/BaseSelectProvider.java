@@ -29,7 +29,7 @@ public class BaseSelectProvider {
 
     public static String selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
-        querySqlConditionBuilder.setLimit(1);
+        querySqlConditionBuilder.limit(1);
         return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 

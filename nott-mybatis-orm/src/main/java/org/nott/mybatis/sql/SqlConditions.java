@@ -7,7 +7,6 @@ import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlOperator;
 
 @Data
-@Builder
 public class SqlConditions {
 
     private String colum;
@@ -21,12 +20,14 @@ public class SqlConditions {
     public SqlConditions() {
     }
 
+    @Builder(builderMethodName = "basicBuilder")
     public SqlConditions(String colum, Object value, SqlOperator sqlOperator) {
         this.colum = colum;
         this.value = value;
         this.sqlOperator = sqlOperator;
     }
 
+    @Builder(builderMethodName = "advancedBuilder")
     public SqlConditions(String colum, Object value, SqlOperator sqlOperator, LikeMode likeMode) {
         if(!SqlOperator.LIKE.equals(sqlOperator)){
             throw new SqlBuilderException("Other SqlOperator Do Not Allow Use LikeMode");
