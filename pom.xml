@@ -48,6 +48,7 @@
         <maven.compiler.target>19</maven.compiler.target>
         <mybatis.version>3.5.11</mybatis.version>
         <mysql-connectorj.version>8.3.0</mysql-connectorj.version>
+        <nott-maybaits.version>0.0.3</nott-maybaits.version>
         <cust-java-home>C:\Program Files\Java\jdk-17</cust-java-home>
         <nott-maybaits.version>0.0.3</nott-maybaits.version>
         <mybatis-spring.version>3.0.1</mybatis-spring.version>
@@ -282,6 +283,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

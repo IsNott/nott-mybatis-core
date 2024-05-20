@@ -2,6 +2,7 @@
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
+import org.nott.datasource.DynamicDataSourceHolder;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
@@ -215,5 +216,14 @@ public class MybatisTestClass {
     public void testIssues22() {
         int o = userMapper.deleteByCondition(DeleteSqlConditionBuilder.build().eq("age", 1));
         System.out.println(o);
+    }
+
+    @Test
+    public void testIssues23() {
+        List<User> users = userMapper.selectList();
+        DynamicDataSourceHolder.setDynamicDataSourceKey("mysql-db02");
+        List<User> users1 = userMapper.selectList();
+        System.out.println(users);
+        System.out.println(users1);
     }
 }

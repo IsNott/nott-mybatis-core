@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Data
 public class DataSourceConfig {
 
+    private String name;
+
     private String url;
 
     private String username;
@@ -23,6 +25,8 @@ public class DataSourceConfig {
     private String driverClassName;
 
     private String type;
+
+    private boolean primary = false;
 
     private HikariDataSourceConfig hikari;
 

@@ -21,6 +21,33 @@ nott:
       poolName: nott-hikari
     druid:
       name: nott-druid
+  dynamic-datasource:
+    dataSourceConfigs:
+      - name: mysql-db01
+        url: jdbc:mysql://127.0.0.1:3306/test?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+        username: root
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        primary: true
+        type: com.alibaba.druid.pool.DruidDataSource
+        hikari:
+          minimum-idle: 0
+          maximum-pool-size: 20
+          idle-timeout: 10000
+          connection-test-query: select 1
+          poolName: nott-hikari
+      - name: mysql-db02
+        url: jdbc:mysql://127.0.0.1:3306/test01?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+        username: root
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        hikari:
+          minimum-idle: 0
+          maximum-pool-size: 20
+          idle-timeout: 10000
+          connection-test-query: select 1
+          poolName: nott-hikari
 
 
 

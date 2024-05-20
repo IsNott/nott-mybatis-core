@@ -18,7 +18,6 @@
 
 
     <dependencies>
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -57,12 +56,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>io.github.isnott</groupId>-->
-<!--            <artifactId>nott-mybatis-dynamic-datasource</artifactId>-->
-<!--            <version>0.0.1</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>io.github.isnott</groupId>
             <artifactId>nott-mybatis-orm</artifactId>
@@ -74,12 +67,6 @@
             <artifactId>nott-mybatis-dynamic-datasource</artifactId>
             <version>${nott-maybaits.version}</version>
         </dependency>
-
-
-<!--        <dependency>-->
-<!--            <groupId>org.mybatis</groupId>-->
-<!--            <artifactId>mybatis-spring</artifactId>-->
-<!--        </dependency>-->
 
 
     </dependencies>

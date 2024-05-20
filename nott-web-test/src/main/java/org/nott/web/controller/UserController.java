@@ -1,5 +1,6 @@
 package org.nott.web.controller;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;

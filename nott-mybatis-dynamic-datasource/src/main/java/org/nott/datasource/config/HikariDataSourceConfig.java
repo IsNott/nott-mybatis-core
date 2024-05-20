@@ -32,7 +32,7 @@ public class HikariDataSourceConfig {
      * 大于等于max-lifetime且max-lifetime>0，会被重置为0；
      * 不等于0且小于10秒，会被重置为10秒
      */
-    private Long idleTimout = 600000L;
+    private Long idleTimeout = 600000L;
 
     /**
      * 测试连接是否可用的查询语句

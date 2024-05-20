@@ -18,6 +18,17 @@ import javax.sql.DataSource;
 
 public class DataSourceConfigUtils {
 
+    public static DataSource createDataSource(DataSourceConfig dataSourceConfig){
+        DataSource dataSource;
+        DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create()
+                .url(dataSourceConfig.getUrl()) // 基础 URL
+                .username(dataSourceConfig.getUsername()) // 基础用户名
+                .password(dataSourceConfig.getPassword()); // 基础密码
+        //.driverClassName(dataSourceConfig.getDriverClassName());// 基础驱动类;
+        dataSource = DataSourceConfigUtils.tranConfigToActuallyClass(dataSourceBuilder,dataSourceConfig);
+        return dataSource;
+    }
+
     public static DataSource tranConfigToActuallyClass(DataSourceBuilder dataSourceBuilder, DataSourceConfig dataSourceConfig) {
         String type = dataSourceConfig.getType();
         DataSource dataSource;
