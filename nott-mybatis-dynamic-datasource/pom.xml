@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>io.github.isnott</groupId>
         <artifactId>nott-mybatis-core</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>io.github.isnott</groupId>
+        <version>0.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,8 +19,8 @@
     <dependencies>
         <dependency>
             <groupId>io.github.isnott</groupId>
-            <artifactId>nott-mybatis-curd</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>nott-mybatis-orm</artifactId>
+            <version>${nott-maybaits.version}</version>
         </dependency>
 
         <dependency>

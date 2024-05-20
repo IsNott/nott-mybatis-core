@@ -4,6 +4,9 @@
 ## 创建初衷
 根据mybatis文档教程从头进行学习(aop、动态数据源、mybatis插件等)，封装自用的mybatis数据操作包。
 
+## 版本 (Version)
+0.0.3
+
 ## 依赖版本
 
 |name|version|
@@ -30,6 +33,36 @@
 
 
 ## 使用说明
+### 引入 (未经测试)
+将此项目作为依赖合并方式引入
+
+```xml
+<dependency>
+    <groupId>io.github.isnott</groupId>
+    <artifactId>nott-mybatis-core</artifactId>
+    <version>0.0.3</version>
+    <type>pom</type>
+</dependency>
+```
+
+仅引入部分模块(nott-mybatis-orm/dynamic-datasource)
+```xml
+<dependencies>
+    <dependency>
+        <groupId>io.github.isnott</groupId>
+        <artifactId>nott-mybatis-orm</artifactId>
+        <version>0.0.3</version>
+    </dependency>
+    
+    <dependency>
+    <groupId>io.github.isnott</groupId>
+    <artifactId>nott-mybatis-dynamic-datasource</artifactId>
+    <version>0.0.3</version>
+    </dependency>
+</dependencies>
+```
+
+
 参考项目web模块test文件夹下的单元测试方法。
 自定义service实现类继承ICommonService<T>获取service方法
 ```java
@@ -45,8 +78,8 @@ public interface UserMapper extends CommonMapper<User> {}
 ```
 
 ## 功能
-使用aop支持Select基础方法（selectById、selectOne）、
-单表查询条件构造器
+使用aop支持Select、Update、Delete、Insert基础方法（selectById、selectOne）、
+单表查询、更新条件构造器
 
 使用示例：
 ```java
@@ -63,24 +96,24 @@ User user = userMapper.selectOneByCondition(
  * 单表条件查询支持的方法接口
  */
 public interface SqlQuery {
+    
+    SqlConditionBuilder eq(String colum, Object val);
 
-    QuerySqlConditionBuilder eq(String colum, Object val);
+    SqlConditionBuilder neq(String colum, Object val);
 
-    QuerySqlConditionBuilder neq(String colum, Object val);
+    SqlConditionBuilder gt(String colum, Object val);
 
-    QuerySqlConditionBuilder gt(String colum, Object val);
+    SqlConditionBuilder ge(String colum, Object val);
 
-    QuerySqlConditionBuilder ge(String colum, Object val);
+    SqlConditionBuilder lt(String colum, Object val);
 
-    QuerySqlConditionBuilder lt(String colum, Object val);
+    SqlConditionBuilder le(String colum, Object val);
 
-    QuerySqlConditionBuilder le(String colum, Object val);
+    SqlConditionBuilder select(InSelect... selects);
 
-    QuerySqlConditionBuilder select(InSelect... selects);
+    SqlConditionBuilder like(InLike... inLike);
 
-    QuerySqlConditionBuilder limit(Integer value);
-
-    QuerySqlConditionBuilder append(String sql);
+    SqlConditionBuilder like(String colum, Object val, LikeMode likeMode);
 
 }
 ```

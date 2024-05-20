@@ -7,12 +7,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableConfigurationProperties(DataSourceConfig.class)
 @RequiredArgsConstructor
+@EnableTransactionManagement // 启用注解驱动的事务管理
 public class DataSourceConfiguration {
 
     private final DataSourceConfig dataSourceConfig;
