@@ -2,44 +2,58 @@ package org.nott.datasource.support;
 
 import org.nott.datasource.config.DataSourceConfig;
 import org.nott.datasource.config.MultiplyDataSourceConfig;
+import org.nott.datasource.exception.DynamicInitException;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 
 import javax.sql.DataSource;
-
+import java.io.InputStream;
 /**
  * @author Nott
  * @date 2024-5-20
  */
 @Configuration
-@EnableConfigurationProperties({MultiplyDataSourceConfig.class})
 public class MultiplyDataSourceSupport implements BeanDefinitionRegistryPostProcessor {
-
-    @Autowired
-    private MultiplyDataSourceConfig multiplyDataSourceConfig;
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        if (multiplyDataSourceConfig != null) {
-            for (DataSourceConfig properties : multiplyDataSourceConfig.getDataSourceConfigs()) {
-                GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
-                beanDefinition.setBeanClass(DataSource.class);
-                DataSource dataSource = DataSourceConfigUtils.createDataSource(properties);
-                beanDefinition.setInstanceSupplier(() -> dataSource);
-                registry.registerBeanDefinition(properties.getName(), beanDefinition);
-                if(properties.isPrimary()){
-                    registry.registerBeanDefinition("default-db", beanDefinition);
-                }
-
-            }
+        MultiplyDataSourceConfig multiplyDataSourceConfig = loadDataSourceConfigs();
+        if (multiplyDataSourceConfig == null || multiplyDataSourceConfig.getDataSourceConfigs() == null) {
+            throw new DynamicInitException("Dont found any dynamic data source config info.");
         }
+        for (DataSourceConfig properties : multiplyDataSourceConfig.getDataSourceConfigs()) {
+            GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+            beanDefinition.setBeanClass(DataSource.class);
+            DataSource dataSource = DataSourceConfigUtils.createDataSource(properties);
+            beanDefinition.setInstanceSupplier(() -> dataSource);
+            registry.registerBeanDefinition(properties.getName(), beanDefinition);
+            if (properties.isPrimary()) {
+                registry.registerBeanDefinition("default-db", beanDefinition);
+            }
+
+        }
+    }
+
+    private MultiplyDataSourceConfig loadDataSourceConfigs() {
+
+        InputStream inputStream = this.getClass()
+                .getClassLoader()
+                .getResourceAsStream("data-source.yml");
+        Constructor constructor = new Constructor(MultiplyDataSourceConfig.class, new LoaderOptions());
+        TypeDescription typeDescription = new TypeDescription(MultiplyDataSourceConfig.class);
+        constructor.addTypeDescription(typeDescription);
+        Yaml yaml = new Yaml(constructor);
+        MultiplyDataSourceConfig multiplyDataSourceConfig = yaml.loadAs(inputStream, MultiplyDataSourceConfig.class);
+        return multiplyDataSourceConfig;
     }
 
     @Override

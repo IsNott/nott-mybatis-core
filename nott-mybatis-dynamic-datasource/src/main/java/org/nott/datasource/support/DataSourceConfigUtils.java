@@ -58,17 +58,15 @@ public class DataSourceConfigUtils {
         HikariDataSourceConfig hikariDataSourceConfig = dataSourceConfig.getHikari();
         dataSource = dataSourceBuilder.type(HikariDataSource.class).build();
         HikariDataSource hikariDataSource = (HikariDataSource) dataSource;
-        BeanUtils.copyProperties(hikariDataSourceConfig,hikariDataSource);
-//        hikariDataSource.setAutoCommit(hikariDataSourceConfig.isAutoCommit());
-//        hikariDataSource.setConnectionTimeout(hikariDataSourceConfig.getConnectionTimeOut());
-//        hikariDataSource.setMaximumPoolSize(hikariDataSourceConfig.getMaximumPoolSize());
-//        hikariDataSource.setIdleTimeout(hikariDataSourceConfig.getIdleTimout());
-//        hikariDataSource.setConnectionTestQuery(hikariDataSourceConfig.getConnectionTestQuery());
-//        hikariDataSource.setMaxLifetime(hikariDataSourceConfig.getMaxLifeTime());
-//        hikariDataSource.setMinimumIdle(hikariDataSourceConfig.getMinimumIdle());
-//        hikariDataSource.setPoolName(hikariDataSourceConfig.getPoolName());
-//        hikariDataSource.setDriverClassName(hikariDataSourceConfig.getDriverClassName());
-//        hikariDataSource.setCatalog(hikariDataSource.getCatalog());
+        hikariDataSource.setAutoCommit(hikariDataSourceConfig.isAutoCommit());
+        hikariDataSource.setConnectionTimeout(hikariDataSourceConfig.getConnectionTimeOut());
+        hikariDataSource.setMaximumPoolSize(hikariDataSourceConfig.getMaximumPoolSize());
+        hikariDataSource.setIdleTimeout(hikariDataSourceConfig.getIdleTimeout());
+        hikariDataSource.setConnectionTestQuery(hikariDataSourceConfig.getConnectionTestQuery());
+        hikariDataSource.setMaxLifetime(hikariDataSourceConfig.getMaxLifeTime());
+        hikariDataSource.setMinimumIdle(hikariDataSourceConfig.getMinimumIdle());
+        hikariDataSource.setPoolName(hikariDataSourceConfig.getPoolName());
+        hikariDataSource.setCatalog(hikariDataSource.getCatalog());
         return hikariDataSource;
     }
 }

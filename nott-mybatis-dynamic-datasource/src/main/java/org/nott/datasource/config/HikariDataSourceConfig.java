@@ -42,7 +42,7 @@ public class HikariDataSourceConfig {
     /**
      *  连接最大存活时间，不等于0且小于30秒，会被重置为默认值30分钟
      */
-    private Long maxLifeTime;
+    private Long maxLifeTime = 0L;
 
     /**
      * 最小空闲连接，默认值10
