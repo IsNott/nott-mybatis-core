@@ -3,6 +3,7 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
 import org.nott.datasource.DynamicDataSourceHolder;
+import org.nott.datasource.annotations.DataSource;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
@@ -220,10 +221,23 @@ public class MybatisTestClass {
 
     @Test
     public void testIssues23() {
-        List<User> users = userMapper.selectList();
+        User one = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b62350b"));
+        System.out.println(one);
+        User test = test();
+        System.out.println(test);
+    }
+
+    @Test
+    public void testIssues24() {
+        User one = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b62350b"));
         DynamicDataSourceHolder.setDynamicDataSourceKey("mysql-db02");
-        List<User> users1 = userMapper.selectList();
-        System.out.println(users);
-        System.out.println(users1);
+        User condition = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "123435345"));
+        System.out.println(one);
+        System.out.println(condition);
+    }
+
+    @DataSource("mysql-db02")
+    public User test(){
+        return userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "123435345"));
     }
 }

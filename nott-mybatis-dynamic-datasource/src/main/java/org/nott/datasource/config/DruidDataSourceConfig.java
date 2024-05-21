@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.Properties;
 
 /**
+ * Druid配置类
  * @author Nott
  * @date 2024-5-17
  */

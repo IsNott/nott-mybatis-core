@@ -4,7 +4,7 @@ package org.nott.datasource.provider;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.nott.datasource.config.MultiplyDataSourceConfig;
-import org.springframework.stereotype.Component;
+import org.nott.datasource.constant.DataSourceConstant;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -26,13 +26,12 @@ public class YamlDataSourceInfoProvider {
     public MultiplyDataSourceConfig loadDataSourceConfigs() {
         InputStream inputStream = this.getClass()
                 .getClassLoader()
-                .getResourceAsStream("data-source.yml");
+                .getResourceAsStream(DataSourceConstant.DATA_SOURCE_CONFIG);
         Constructor constructor = new Constructor(MultiplyDataSourceConfig.class, new LoaderOptions());
         TypeDescription typeDescription = new TypeDescription(MultiplyDataSourceConfig.class);
         constructor.addTypeDescription(typeDescription);
         Yaml yaml = new Yaml(constructor);
-        MultiplyDataSourceConfig multiplyDataSourceConfig = yaml.loadAs(inputStream, MultiplyDataSourceConfig.class);
-        return multiplyDataSourceConfig;
+        return yaml.loadAs(inputStream, MultiplyDataSourceConfig.class);
     }
 
 

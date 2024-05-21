@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * 数据源基础配置类
  * @author Nott
  * @date 2024-5-10
  */

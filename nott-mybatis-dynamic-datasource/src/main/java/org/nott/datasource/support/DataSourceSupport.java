@@ -2,6 +2,7 @@ package org.nott.datasource.support;
 
 import org.nott.datasource.DynamicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -12,6 +13,7 @@ import java.util.Map;
  * @date 2024-5-20
  */
 @Component
+@ConditionalOnProperty(prefix = "nott", name = "enable-dynamic-datasource", havingValue = "true")
 public class DataSourceSupport {
 
     @Autowired

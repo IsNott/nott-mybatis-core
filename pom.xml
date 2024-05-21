@@ -192,7 +192,7 @@
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectjweaver.version}</version>
-                <scope>runtime</scope>
+<!--                <scope>runtime</scope>-->
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->

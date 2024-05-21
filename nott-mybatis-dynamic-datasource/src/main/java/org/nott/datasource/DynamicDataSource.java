@@ -16,7 +16,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private Map<Object, Object> defineTargetDataSources;
 
-    // 查找当前线程要使用的数据源
+    /**
+     * 重写AbstractRoutingDataSource的determineCurrentLookupKey，定义选中当前数据源key的方法
+     * @return DataSource’s key
+     */
     @Override
     protected Object determineCurrentLookupKey() {
         return DynamicDataSourceHolder.getDynamicDataSourceKey();

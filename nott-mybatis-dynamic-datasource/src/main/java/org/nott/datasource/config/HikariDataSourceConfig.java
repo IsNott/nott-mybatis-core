@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Hikari数据源配置类
  * @author Nott
  * @date 2024-5-16
  */

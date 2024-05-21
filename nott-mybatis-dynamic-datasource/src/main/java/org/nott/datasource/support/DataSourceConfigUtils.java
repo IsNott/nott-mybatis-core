@@ -23,8 +23,8 @@ public class DataSourceConfigUtils {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create()
                 .url(dataSourceConfig.getUrl()) // 基础 URL
                 .username(dataSourceConfig.getUsername()) // 基础用户名
-                .password(dataSourceConfig.getPassword()); // 基础密码
-        //.driverClassName(dataSourceConfig.getDriverClassName());// 基础驱动类;
+                .password(dataSourceConfig.getPassword()) // 基础密码
+                .driverClassName(dataSourceConfig.getDriverClassName());// 基础驱动类;
         dataSource = DataSourceConfigUtils.tranConfigToActuallyClass(dataSourceBuilder,dataSourceConfig);
         return dataSource;
     }

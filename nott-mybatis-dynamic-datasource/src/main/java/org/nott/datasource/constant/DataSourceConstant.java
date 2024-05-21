@@ -5,6 +5,8 @@ package org.nott.datasource.constant;
  * @date 2024-5-16
  */
 public class DataSourceConstant {
+    public static final String DEFAULT_DB = "default-db";
+    public static final String DATA_SOURCE_CONFIG = "data-source.yml";
 
     public interface TYPE {
         public static final String DBCP2 = "org.apache.commons.dbcp2.BasicDataSource";

@@ -77,7 +77,7 @@ public class UserService<User> extends ICommonService<User> {
 public interface UserMapper extends CommonMapper<User> {}
 ```
 
-## 功能
+## ORM
 使用aop支持Select、Update、Delete、Insert基础方法（selectById、selectOne）、
 单表查询、更新条件构造器
 
@@ -126,7 +126,6 @@ int affectRow = userMapper.deleteById("123435345");
 int affectRow = userMapper.deleteByIds(Arrays.asList("123435345"));
 ```
 
-
 Service封装mapper基础方法、分页方法，详细见CommonService文件
 ```
 ...
@@ -135,7 +134,54 @@ Page<T> page(Page<T> page);
 Page<T> page(Page<T> page, QuerySqlConditionBuilder querySqlConditionBuilder);
 ...
 ```
+## dynamic-datasource
+切换数据源，支持使用hikari/druid数据源
 
+使用：
+在application.yml加入动态数据源开关
+
+```yaml
+nott:
+  enable-dynamic-datasource: true
+```
+添加data-source.yml文件，加入数据源列表(hikari/druid),
+当application.yml和data-source.yml数据源配置内容同时存在，并且打开动态数据源开关，
+程序只加载data-source.yml里的内容。
+
+*不需要动态切换数据源时，关闭application.yml中的开关即可。*
+```yaml
+dataSourceConfigs:
+  - name: mysql-db01
+    url: jdbc:mysql://127.0.0.1/test?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driverClassName: com.mysql.cj.jdbc.Driver
+    # 标识默认数据源
+    primary: true
+    type: com.zaxxer.hikari.HikariDataSource
+    #type: com.alibaba.druid.pool.DruidDataSource
+    hikari:
+      minimumIdle: 0
+      maximumPoolSize: 20
+      idleTimeout: 10000
+      connectionTestQuery: select 1
+      poolName: nott-hikari-01
+  - name: mysql-db02
+   ...
+```
+在代码或者方法体上切换数据源
+```java
+public void test(){
+   DynamicDataSourceHolder.setDynamicDataSourceKey("mysql-db02");    
+}
+
+// 注解功能还未测试
+@DataSource("mysql-db02")
+public void test(){
+        ...
+}
+
+```
 
 ## 参考文档
 mybatis中文文档：https://mybatis.net.cn/getting-started.html

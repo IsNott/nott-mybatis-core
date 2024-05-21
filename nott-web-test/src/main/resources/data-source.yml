@@ -4,6 +4,7 @@ dataSourceConfigs:
     username: root
     password: 123456
     driverClassName: com.mysql.cj.jdbc.Driver
+    # 标识默认数据源
     primary: true
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -11,7 +12,7 @@ dataSourceConfigs:
       maximumPoolSize: 20
       idleTimeout: 10000
       connectionTestQuery: select 1
-      poolName: nott-hikari
+      poolName: nott-hikari-01
   - name: mysql-db02
     url: jdbc:mysql://127.0.0.1:3306/test01?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     username: root
@@ -23,4 +24,4 @@ dataSourceConfigs:
       maximumPoolSize: 20
       idleTimeout: 10000
       connectionTestQuery: select 1
-      poolName: nott-hikari
+      poolName: nott-hikari-02

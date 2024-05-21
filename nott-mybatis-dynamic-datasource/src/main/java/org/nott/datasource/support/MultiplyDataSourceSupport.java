@@ -2,18 +2,19 @@ package org.nott.datasource.support;
 
 import org.nott.datasource.config.DataSourceConfig;
 import org.nott.datasource.config.MultiplyDataSourceConfig;
+import org.nott.datasource.constant.DataSourceConstant;
 import org.nott.datasource.exception.DynamicInitException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-
 
 import javax.sql.DataSource;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ import java.io.InputStream;
  * @date 2024-5-20
  */
 @Configuration
+@ConditionalOnProperty(prefix = "nott", name = "enable-dynamic-datasource", havingValue = "true")
 public class MultiplyDataSourceSupport implements BeanDefinitionRegistryPostProcessor {
 
     @Override
@@ -37,17 +39,17 @@ public class MultiplyDataSourceSupport implements BeanDefinitionRegistryPostProc
             beanDefinition.setInstanceSupplier(() -> dataSource);
             registry.registerBeanDefinition(properties.getName(), beanDefinition);
             if (properties.isPrimary()) {
-                registry.registerBeanDefinition("default-db", beanDefinition);
+                registry.registerBeanDefinition(DataSourceConstant.DEFAULT_DB, beanDefinition);
             }
 
         }
     }
 
-    private MultiplyDataSourceConfig loadDataSourceConfigs() {
+    public MultiplyDataSourceConfig loadDataSourceConfigs() {
 
         InputStream inputStream = this.getClass()
                 .getClassLoader()
-                .getResourceAsStream("data-source.yml");
+                .getResourceAsStream(DataSourceConstant.DATA_SOURCE_CONFIG);
         Constructor constructor = new Constructor(MultiplyDataSourceConfig.class, new LoaderOptions());
         TypeDescription typeDescription = new TypeDescription(MultiplyDataSourceConfig.class);
         constructor.addTypeDescription(typeDescription);

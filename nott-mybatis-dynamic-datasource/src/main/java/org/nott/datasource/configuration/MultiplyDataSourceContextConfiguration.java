@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.nott.datasource.DynamicDataSource;
 import org.nott.datasource.config.DataSourceConfig;
 import org.nott.datasource.config.MultiplyDataSourceConfig;
+import org.nott.datasource.constant.DataSourceConstant;
 import org.nott.datasource.provider.YamlDataSourceInfoProvider;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -22,14 +23,12 @@ import java.util.Map;
  */
 
 @Configuration
-//@EnableConfigurationProperties({MultiplyDataSourceConfig.class})
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "nott", name = "enable-dynamic-datasource", havingValue = "true")
 public class MultiplyDataSourceContextConfiguration {
 
     @Autowired
     private BeanFactory beanFactory;
-
-//    private final MultiplyDataSourceConfig multiplyDataSourceConfig;
 
     @Bean
     public YamlDataSourceInfoProvider yamlDataSourceInfoProvider(){
@@ -43,7 +42,7 @@ public class MultiplyDataSourceContextConfiguration {
     public DynamicDataSource dynamicDataSource() {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         MultiplyDataSourceConfig multiplyDataSourceConfig = yamlDataSourceInfoProvider().getMultiplyDataSourceConfig();
-        dynamicDataSource.setDefaultTargetDataSource(beanFactory.getBean("default-db"));
+        dynamicDataSource.setDefaultTargetDataSource(beanFactory.getBean(DataSourceConstant.DEFAULT_DB));
         if (multiplyDataSourceConfig == null) {
             return dynamicDataSource;
         }
@@ -53,7 +52,7 @@ public class MultiplyDataSourceContextConfiguration {
             Object bean = beanFactory.getBean(config.getName());
             defineTargetDataSources.put(config.getName(), bean);
         }
-        dynamicDataSource.setDefaultTargetDataSource(beanFactory.getBean("default-db"));
+        dynamicDataSource.setDefaultTargetDataSource(beanFactory.getBean(DataSourceConstant.DEFAULT_DB));
         dynamicDataSource.setTargetDataSources(defineTargetDataSources);
         dynamicDataSource.setDefineTargetDataSources(defineTargetDataSources);
         return dynamicDataSource;
