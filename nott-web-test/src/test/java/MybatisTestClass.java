@@ -3,7 +3,6 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.nott.Application;
 import org.nott.datasource.DynamicDataSourceHolder;
-import org.nott.datasource.annotations.DataSource;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
@@ -13,13 +12,13 @@ import org.nott.mybatis.sql.model.InLike;
 import org.nott.mybatis.sql.model.InSelect;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
-
 import org.nott.web.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -27,7 +26,7 @@ import java.util.List;
  * @date 2024-5-10
  */
 
-
+@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
 public class MybatisTestClass {
 
@@ -221,11 +220,10 @@ public class MybatisTestClass {
 
     @Test
     public void testIssues23() {
-        User one = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b62350b"));
-        System.out.println(one);
-        User test = test();
+        User test = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "123435345"));
         System.out.println(test);
     }
+
 
     @Test
     public void testIssues24() {
@@ -236,8 +234,19 @@ public class MybatisTestClass {
         System.out.println(condition);
     }
 
-    @DataSource("mysql-db02")
-    public User test(){
-        return userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "123435345"));
+    @Test
+    public void testTransaction() {
+        User user1 = new User();
+        user1.setId(UUID.randomUUID().toString());
+        user1.setName("张三");
+        userMapper.insert(user1);
+
+        User user2 = new User();
+        user2.setId(UUID.randomUUID().toString());
+        user2.setName("李四");
+        userMapper.insert(user2);
+
+        // 模拟异常，触发回滚
+        int i = 1 / 0;
     }
 }

@@ -2,9 +2,8 @@ package org.nott.mybatis.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.nott.mybatis.model.Page;
-import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
-import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlConditionBuilder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,11 +23,11 @@ public interface CommonService<T> {
 
     List<T> getList();
 
-    List<T> getList(QuerySqlConditionBuilder querySqlConditionBuilder);
+    List<T> getList(SqlConditionBuilder querySqlConditionBuilder);
 
     T getOne();
 
-    T getOne(QuerySqlConditionBuilder querySqlConditionBuilder);
+    T getOne(SqlConditionBuilder querySqlConditionBuilder);
 
     T save(T t);
 
@@ -36,11 +35,11 @@ public interface CommonService<T> {
 
     boolean removeByIds(@Param("ids") List ids);
 
-    int delete(DeleteSqlConditionBuilder deleteSqlConditionBuilder);
+    int delete(SqlConditionBuilder deleteSqlConditionBuilder);
 
     T updateById(@Param("entity") T t);
 
-    boolean update(UpdateSqlConditionBuilder updateSqlConditionBuilder);
+    boolean update(SqlConditionBuilder updateSqlConditionBuilder);
 
 
 }

@@ -1,11 +1,15 @@
 package org.nott.web.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import org.nott.datasource.annotations.DataSource;
+import org.nott.mybatis.exception.OrmOperateException;
+import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
+import org.nott.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,10 +27,33 @@ public class UserController {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private UserService userService;
+
     @RequestMapping("/test")
     public void test() {
         String id = "410544b2-4001-4271-9855-fec4b6a6442a";
         User user = userMapper.selectUser(id);
+        logger.info("{}",test1());
         logger.info("{}", user);
     }
+
+    @DataSource("mysql-db02")
+    @RequestMapping("/test01")
+    User test1(){
+        String id = "410544b2-4001-4271-9855-fec4b6a6442a";
+        User user = userMapper.selectUser(id);
+        return user;
+    }
+
+    @RequestMapping("/test02")
+    @Transactional(rollbackFor = OrmOperateException.class)
+    public void testTransation(){
+        userService.update(UpdateSqlConditionBuilder.build().eq("id","410544b2-4001-4271-9855-fec4b6a6442a")
+                .set("name","spring"));
+
+        throw new OrmOperateException("test");
+    }
+
+
 }

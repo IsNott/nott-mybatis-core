@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class UserService<User> extends ICommonService<User> {
+public class UserService extends ICommonService<User> {
 
 }

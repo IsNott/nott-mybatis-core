@@ -1,4 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.nott.datasource.configuration.DataSourceConfiguration\
 org.nott.datasource.configuration.MultiplyDataSourceContextConfiguration\
-org.nott.datasource.support.MultiplyDataSourceSupport
+org.nott.datasource.configuration.DataSourceAopConfiguration
+

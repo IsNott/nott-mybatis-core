@@ -175,7 +175,7 @@ public void test(){
    DynamicDataSourceHolder.setDynamicDataSourceKey("mysql-db02");    
 }
 
-// 注解功能还未测试
+
 @DataSource("mysql-db02")
 public void test(){
         ...

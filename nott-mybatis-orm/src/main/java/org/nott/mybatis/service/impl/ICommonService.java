@@ -4,9 +4,8 @@ import org.nott.mybatis.exception.OrmOperateException;
 import org.nott.mybatis.service.CommonService;
 import org.nott.mybatis.mapper.CommonMapper;
 import org.nott.mybatis.model.Page;
-import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
-import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlConditionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -55,7 +54,7 @@ public class ICommonService<T> implements CommonService<T> {
     }
 
     @Override
-    public List<T> getList(QuerySqlConditionBuilder querySqlConditionBuilder) {
+    public List<T> getList(SqlConditionBuilder querySqlConditionBuilder) {
         return commonMapper.selectListByCondition(querySqlConditionBuilder);
     }
 
@@ -65,7 +64,7 @@ public class ICommonService<T> implements CommonService<T> {
     }
 
     @Override
-    public T getOne(QuerySqlConditionBuilder querySqlConditionBuilder) {
+    public T getOne(SqlConditionBuilder querySqlConditionBuilder) {
         return commonMapper.selectOneByCondition(querySqlConditionBuilder);
     }
 
@@ -92,7 +91,7 @@ public class ICommonService<T> implements CommonService<T> {
     }
 
     @Override
-    public int delete(DeleteSqlConditionBuilder deleteSqlConditionBuilder) {
+    public int delete(SqlConditionBuilder deleteSqlConditionBuilder) {
         int deletedRow = commonMapper.deleteByCondition(deleteSqlConditionBuilder);
         if(deletedRow > 0){
             return deletedRow;
@@ -110,7 +109,7 @@ public class ICommonService<T> implements CommonService<T> {
     }
 
     @Override
-    public boolean update(UpdateSqlConditionBuilder updateSqlConditionBuilder) {
+    public boolean update(SqlConditionBuilder updateSqlConditionBuilder) {
         if (commonMapper.updateByCondition(updateSqlConditionBuilder) > 0) {
             return true;
         }

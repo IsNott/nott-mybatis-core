@@ -11,20 +11,20 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 
 import javax.sql.DataSource;
 
-@Configuration
-@EnableTransactionManagement
-public class TransactionConfig implements TransactionManagementConfigurer {
-
-    @Autowired
-    private DataSource dataSource;
-
-    @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
-
-    @Override
-    public TransactionManager annotationDrivenTransactionManager() {
-        return transactionManager(dataSource);
-    }
-}
+//@Configuration
+//@EnableTransactionManagement
+//public class TransactionConfig implements TransactionManagementConfigurer {
+//
+//    @Autowired
+//    private DataSource dataSource;
+//
+//    @Bean
+//    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+//        return new DataSourceTransactionManager(dataSource);
+//    }
+//
+//    @Override
+//    public TransactionManager annotationDrivenTransactionManager() {
+//        return transactionManager(dataSource);
+//    }
+//}
