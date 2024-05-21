@@ -38,13 +38,6 @@ public class MybatisTestClass {
     @Resource
     private UserMapper userMapper;
 
-    public ClassPathXmlApplicationContext getContext() {
-        if (context == null) {
-            context = new ClassPathXmlApplicationContext("spring-context.xml");
-        }
-        return context;
-    }
-
     @Test
     public void testIssues01() {
         String id = "410544b2-4001-4271-9855-fec4b6a6442a";
