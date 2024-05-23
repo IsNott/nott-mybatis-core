@@ -13,10 +13,6 @@ import java.util.List;
 @Builder
 public class MybatisSqlBean {
 
-
-//    public MybatisSqlBean() {
-//    }
-
     /**
      * 表名
      */
@@ -41,10 +37,5 @@ public class MybatisSqlBean {
      * bean的Class
      */
     private Class<?> originalBeanClass;
-
-    /**
-     * 分页对象
-     */
-    private Page<?> page;
 
 }

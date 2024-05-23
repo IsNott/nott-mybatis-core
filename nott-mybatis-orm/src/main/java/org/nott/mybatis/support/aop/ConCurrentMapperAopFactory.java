@@ -48,7 +48,6 @@ public class ConCurrentMapperAopFactory {
 
     // 获取泛型并实例化bean
     // 封装对象所属sql表/字段属性
-    // TODO 封装分页方法信息、拓展支持的返回类class
     public MybatisSqlBean getCurrentMapperBean() {
 
         Class<?> currentMapperClass = getCurrentMapperClass();

@@ -42,11 +42,11 @@ public class MybatisAutoConfiguration {
     }
 
     // todo 验证外部应用加载bean上下文时是否自动注册CommonMapper bean
-    @Bean("NottMapperScannerRegistrar")
-    public NottMapperScannerRegistrar registrar(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry){
-        NottMapperScannerRegistrar registrar = new NottMapperScannerRegistrar();
-        registrar.registerBeanDefinitions(importingClassMetadata, registry);
-        return registrar;
-    }
+//    @Bean("NottMapperScannerRegistrar")
+//    public NottMapperScannerRegistrar registrar(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry){
+//        NottMapperScannerRegistrar registrar = new NottMapperScannerRegistrar();
+//        registrar.registerBeanDefinitions(importingClassMetadata, registry);
+//        return registrar;
+//    }
 
 }

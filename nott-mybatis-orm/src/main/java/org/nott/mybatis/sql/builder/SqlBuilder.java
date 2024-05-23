@@ -190,10 +190,9 @@ public class SqlBuilder {
 
     public static String buildFindByPkSql(MybatisSqlBean bean, Serializable value) {
         String valStr = value.toString();
-        valStr = (String) reassembleValue(valStr);
         Pk pk = bean.getPk();
         QuerySqlConditionBuilder builder = QuerySqlConditionBuilder.build();
-        builder.setSqlConditions(Arrays.asList(SqlConditions.basicBuilder().value(valStr).colum(pk.getName()).build()));
+        builder.setSqlConditions(Arrays.asList(SqlConditions.basicBuilder().value(valStr).sqlOperator(SqlOperator.EQ).colum(pk.getName()).build()));
         return buildSql(bean, builder);
     }
 
