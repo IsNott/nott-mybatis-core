@@ -22,8 +22,8 @@ public class BaseSelectProvider {
 
     public static String selectOne() {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
-        QuerySqlConditionBuilder.build().limit(1);
-        return SqlBuilder.buildSql(bean, null);
+        QuerySqlConditionBuilder builder = (QuerySqlConditionBuilder)QuerySqlConditionBuilder.build().limit(1);
+        return SqlBuilder.buildSql(bean, builder);
     }
 
     public static String selectOneByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
@@ -42,7 +42,6 @@ public class BaseSelectProvider {
         return SqlBuilder.buildSql(bean, querySqlConditionBuilder);
     }
 
-    // TODO 分页修改
     public static String pageCountByCondition(QuerySqlConditionBuilder querySqlConditionBuilder) {
         MybatisSqlBean bean = ConCurrentMapperAopFactory.getBean();
         return SqlBuilder.buildPageCount(bean, querySqlConditionBuilder);

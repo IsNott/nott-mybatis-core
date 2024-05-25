@@ -33,19 +33,8 @@
 
 
 ## 使用说明
-### 引入 (未经测试)
-将此项目作为依赖合并方式引入
-
-```xml
-<dependency>
-    <groupId>io.github.isnott</groupId>
-    <artifactId>nott-mybatis-core</artifactId>
-    <version>0.0.3</version>
-    <type>pom</type>
-</dependency>
-```
-
-仅引入部分模块(nott-mybatis-orm/dynamic-datasource)
+### 引入
+pom.xml引入模块(nott-mybatis-orm/dynamic-datasource)
 ```xml
 <dependencies>
     <dependency>
@@ -61,6 +50,8 @@
     </dependency>
 </dependencies>
 ```
+
+在web项目启动主方法上加入@ComponentScan({"org.nott"})
 
 
 参考项目web模块test文件夹下的单元测试方法。
@@ -78,6 +69,27 @@ public interface UserMapper extends CommonMapper<User> {}
 ```
 
 ## ORM
+application.yml加入以下配置
+```yml
+nott:
+  mybatis:
+    mapper-location: classpath:mapper/**Mapper.xml
+  # 不加入dynamic-dataSource时加入下面配置
+  datasource:
+    name: mysql-db01
+    url: jdbc:mysql://127.0.0.1:3306/test?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: 888888
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimumIdle: 0
+      maximumPoolSize: 20
+      idleTimeout: 10000
+      connectionTestQuery: select 1
+      poolName: nott-hikari-01
+```
+
 使用aop支持Select、Update、Delete、Insert基础方法（selectById、selectOne）、
 单表查询、更新条件构造器
 
@@ -172,6 +184,7 @@ dataSourceConfigs:
 在代码或者方法体上切换数据源
 ```java
 public void test(){
+    // 显式切换
    DynamicDataSourceHolder.setDynamicDataSourceKey("mysql-db02");    
 }
 

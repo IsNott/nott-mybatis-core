@@ -7,7 +7,7 @@ import org.nott.mybatis.support.aop.ConCurrentMapperAopFactory;
 import java.util.Map;
 
 /**
- * TODO Update Operation
+ * Base update sql provider
  *
  * @author Nott
  * @date 2024-5-14
