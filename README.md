@@ -5,7 +5,7 @@
 根据mybatis文档教程从头进行学习(aop、动态数据源、mybatis插件等)，封装自用的mybatis数据操作包。
 
 ## 版本 (Version)
-0.0.3
+0.0.4
 
 ## 依赖版本
 
@@ -40,36 +40,37 @@ pom.xml引入模块(nott-mybatis-orm/dynamic-datasource)
     <dependency>
         <groupId>io.github.isnott</groupId>
         <artifactId>nott-mybatis-orm</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </dependency>
     
     <dependency>
     <groupId>io.github.isnott</groupId>
     <artifactId>nott-mybatis-dynamic-datasource</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     </dependency>
 </dependencies>
 ```
 
-在web项目启动主方法上加入@ComponentScan({"org.nott"})
+在web项目启动主方法上加入**@ComponentScan({"org.nott"})**
 
+可参考项目web模块test文件夹下的单元测试方法。
 
-参考项目web模块test文件夹下的单元测试方法。
-自定义service实现类继承ICommonService<T>获取service方法
+自定义service实现类继承ICommonService<T>获取通用service实现方法
+（在CommonMapper提供的方法上二次封装分页等方法）
 ```java
 @Service
-public class UserService<User> extends ICommonService<User> {
+public class UserService extends ICommonService<User> {
 
 }
 ```
 
-自定义mapper可直接获取CommonMapper基础方法
+自定义mapper可直接获取CommonMapper基础方法（需要传递泛型）
 ```java
 public interface UserMapper extends CommonMapper<User> {}
 ```
 
 ## ORM
-application.yml加入以下配置
+**application.yml**加入以下配置
 ```yml
 nott:
   mybatis:
@@ -149,7 +150,6 @@ Page<T> page(Page<T> page, QuerySqlConditionBuilder querySqlConditionBuilder);
 ## dynamic-datasource
 切换数据源，支持使用hikari/druid数据源
 
-使用：
 在application.yml加入动态数据源开关
 
 ```yaml
@@ -196,6 +196,9 @@ public void test(){
 
 ```
 
+## 迭代
+个人开发无暇顾及，等到空闲时进行框架整合时再提供迭代计划。
+
 ## 参考文档
 mybatis中文文档：https://mybatis.net.cn/getting-started.html
 
@@ -206,4 +209,3 @@ jsqlparser:https://jsqlparser.github.io/JSqlParser/usage.html
 hikari数据源配置参考: https://www.cnblogs.com/didispace/p/12291832.html
 
 druid配置属性：https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8
-
