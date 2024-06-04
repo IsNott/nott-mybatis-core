@@ -46,7 +46,7 @@ public class MybatisAopInterceptor implements MethodInterceptor {
     public Object invoke(@Nonnull MethodInvocation invocation) throws Throwable {
         this.set(invocation);
 
-        Object result = null;
+        Object result;
         try {
             result = invocation.proceed();
             return result;

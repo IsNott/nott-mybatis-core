@@ -38,4 +38,9 @@ public class MybatisSqlBean {
      */
     private Class<?> originalBeanClass;
 
+    /**
+     * query table alias
+     */
+    private String alias;
+
 }

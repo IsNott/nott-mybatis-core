@@ -47,7 +47,7 @@ public class Where {
         return new SqlConditions(field,SqlOperator.IS_NULL);
     }
 
-    public static SqlConditions NotNull(String field) {
+    public static SqlConditions notNull(String field) {
         return new SqlConditions(field, SqlOperator.IS_NOT_NULL);
     }
 

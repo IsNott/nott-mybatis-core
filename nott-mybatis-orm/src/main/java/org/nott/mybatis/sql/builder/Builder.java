@@ -129,7 +129,7 @@ public abstract class Builder implements SqlQuery, SqlConditionBuilder, SqlUpdat
     }
 
     public Builder notNull(String fieldName){
-        this.sqlConditions.add(Where.NotNull(fieldName));
+        this.sqlConditions.add(Where.notNull(fieldName));
         return this;
     }
 
