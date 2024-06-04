@@ -110,7 +110,7 @@ User user = userMapper.selectOneByCondition(
  */
 public interface SqlQuery {
     
-    SqlConditionBuilder eq(String colum, Object val);
+   SqlConditionBuilder eq(String colum, Object val);
 
     SqlConditionBuilder neq(String colum, Object val);
 
@@ -128,6 +128,23 @@ public interface SqlQuery {
 
     SqlConditionBuilder like(String colum, Object val, LikeMode likeMode);
 
+    SqlConditionBuilder or(SqlConditions... sqlConditions);
+
+    SqlConditionBuilder limit(Integer value);
+
+    SqlConditionBuilder append(String sql);
+
+    SqlConditionBuilder orderByDesc(String... colum);
+
+    SqlConditionBuilder orderByAsc(String... colum);
+
+    SqlConditionBuilder isNull(String fieldName);
+
+    SqlConditionBuilder notNull(String fieldName);
+
+    SqlConditionBuilder groupBy(String... colum);
+
+    SqlConditionBuilder having(String... sql);
 }
 ```
 
@@ -197,7 +214,7 @@ public void test(){
 ```
 
 ## 迭代
-个人开发无暇顾及，等到空闲时进行框架整合时再提供迭代计划。
+待增加：别名查询、多表联表查询
 
 ## 参考文档
 mybatis中文文档：https://mybatis.net.cn/getting-started.html
