@@ -20,6 +20,14 @@ public class SqlConditions {
     public SqlConditions() {
     }
 
+    public SqlConditions(String colum, SqlOperator sqlOperator) {
+        if(!SqlOperator.IS_NULL.equals(sqlOperator) && !SqlOperator.IS_NOT_NULL.equals(sqlOperator)){
+            throw new SqlBuilderException("Other SqlOperator Without Value Not Allow Use IsNull/NotNull Sql Condition");
+        }
+        this.colum = colum;
+        this.sqlOperator = sqlOperator;
+    }
+
     @Builder(builderMethodName = "basicBuilder")
     public SqlConditions(String colum, Object value, SqlOperator sqlOperator) {
         this.colum = colum;

@@ -13,7 +13,10 @@ public enum SqlOperator {
     LT(" > "),
     IN(" in "),
     LIKE(" LIKE "),
-    ;
+
+    IS_NULL(" IS NULL"),
+
+    IS_NOT_NULL(" IS NOT NULL");
 
     private String value;
 

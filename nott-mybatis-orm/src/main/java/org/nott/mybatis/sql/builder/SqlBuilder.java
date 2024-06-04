@@ -48,11 +48,22 @@ public class SqlBuilder {
 
         buildSelectSql(sqlBean, sql, tableColums, sqlColum);
         buildWhereSql(sql, sqlConditions);
+        buildOrSql(sql, querySqlConditionBuilder);
         buildOrderBySql(sql, querySqlConditionBuilder);
         buildGroupBySql(sql, querySqlConditionBuilder);
         buildLimitSql(sql, querySqlConditionBuilder);
         buildHavingSql(sql, querySqlConditionBuilder);
         return sql;
+    }
+
+    private static void buildOrSql(SQL sql, QuerySqlConditionBuilder querySqlConditionBuilder) {
+        List<SqlConditions> orConditions = querySqlConditionBuilder.getOrConditions();
+        if (!orConditions.isEmpty()) {
+            for (SqlConditions condition : orConditions) {
+                sql.OR();
+                buildSingleWhereSql(sql, condition);
+            }
+        }
     }
 
     private static void buildHavingSql(SQL sql, QuerySqlConditionBuilder querySqlConditionBuilder) {
@@ -122,13 +133,18 @@ public class SqlBuilder {
             sql.WHERE("1=1");
             for (SqlConditions sqlCondition : sqlConditions) {
                 boolean isLikeSql = sqlCondition.getLikeMode() != null;
+                boolean isNullValue = SqlOperator.IS_NOT_NULL.equals(sqlCondition.getSqlOperator()) || SqlOperator.IS_NULL.equals(sqlCondition.getSqlOperator());
                 SqlOperator sqlOperator = sqlCondition.getSqlOperator();
                 Object value = sqlCondition.getValue();
                 if (isLikeSql) {
                     value = buildLikeAround(sqlCondition.getLikeMode(), value);
                 }
-                value = reassembleValue(value);
-                sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue() + value);
+                value = isNullValue ? null : reassembleValue(value);
+                if(isNullValue){
+                    sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue());
+                }else {
+                    sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue() + value);
+                }
             }
         }
     }

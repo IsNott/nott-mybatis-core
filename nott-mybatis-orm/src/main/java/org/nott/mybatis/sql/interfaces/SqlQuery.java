@@ -1,8 +1,9 @@
 package org.nott.mybatis.sql.interfaces;
 
+
 import org.nott.mybatis.sql.builder.SqlConditionBuilder;
+import org.nott.mybatis.sql.builder.SqlConditions;
 import org.nott.mybatis.sql.enums.LikeMode;
-import org.nott.mybatis.sql.enums.SqlOperator;
 import org.nott.mybatis.sql.model.InLike;
 import org.nott.mybatis.sql.model.InSelect;
 
@@ -30,8 +31,7 @@ public interface SqlQuery {
 
     SqlConditionBuilder like(String colum, Object val, LikeMode likeMode);
 
-    // TODO build or sql
-    SqlConditionBuilder or(String colum, SqlOperator operator,Object val);
+    SqlConditionBuilder or(SqlConditions... sqlConditions);
 
     SqlConditionBuilder limit(Integer value);
 
@@ -40,6 +40,10 @@ public interface SqlQuery {
     SqlConditionBuilder orderByDesc(String... colum);
 
     SqlConditionBuilder orderByAsc(String... colum);
+
+    SqlConditionBuilder isNull(String fieldName);
+
+    SqlConditionBuilder notNull(String fieldName);
 
     SqlConditionBuilder groupBy(String... colum);
 

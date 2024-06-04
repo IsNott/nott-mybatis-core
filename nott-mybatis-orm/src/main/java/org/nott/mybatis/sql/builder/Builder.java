@@ -33,6 +33,8 @@ public abstract class Builder implements SqlQuery, SqlConditionBuilder, SqlUpdat
 
     private List<String> havingSql = new ArrayList<>();
 
+    private List<SqlConditions> orConditions = new ArrayList<>();
+
     private String alias;
 
     private Integer limit;
@@ -116,8 +118,19 @@ public abstract class Builder implements SqlQuery, SqlConditionBuilder, SqlUpdat
     }
 
     @Override
-    public Builder or(String colum, SqlOperator operator, Object val) {
-        return null;
+    public Builder or(SqlConditions... sqlConditions) {
+        orConditions.addAll(Arrays.asList(sqlConditions));
+        return this;
+    }
+
+    public Builder isNull(String fieldName){
+        this.sqlConditions.add(Where.isNull(fieldName));
+        return this;
+    }
+
+    public Builder notNull(String fieldName){
+        this.sqlConditions.add(Where.NotNull(fieldName));
+        return this;
     }
 
 

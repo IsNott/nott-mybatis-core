@@ -10,12 +10,15 @@ import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.model.InLike;
 import org.nott.mybatis.sql.model.InSelect;
+import org.nott.mybatis.sql.model.Where;
 import org.nott.web.entity.User;
 import org.nott.web.mapper.UserMapper;
 import org.nott.web.service.UserService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -222,9 +225,22 @@ public class MybatisTestClass {
     public void testIssues24() {
         User one = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b62350b"));
         DynamicDataSourceHolder.setDynamicDataSourceKey("mysql-db02");
-        User condition = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "123435345"));
-        System.out.println(one);
-        System.out.println(condition);
+        User two = userMapper.selectOneByCondition(QuerySqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b62350b"));
+        Assert.isTrue("mybatis-test".equals(one.getName()),"");
+        Assert.isTrue("mybatis-test01".equals(two.getName()),"");
+    }
+
+    @Test
+    public void testIssues25(){
+        List<User> users = userMapper.selectListByCondition(QuerySqlConditionBuilder.build().eq("id", "410544b2-4001-4271-9855-fec4b62350b")
+                .or(Where.eq("age", 16), Where.eq("age", "17")));
+        Assert.isTrue(users.size() == 3,"");
+    }
+
+    @Test
+    public void testIssues26(){
+        List<User> users = userMapper.selectListByCondition(QuerySqlConditionBuilder.build().notNull("id"));
+        Assert.isTrue(users.size() == 3,"");
     }
 
     @Test
