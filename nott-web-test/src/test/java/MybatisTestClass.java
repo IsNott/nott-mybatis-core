@@ -4,16 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.nott.Application;
 import org.nott.datasource.DynamicDataSourceHolder;
 import org.nott.mybatis.model.Page;
+import org.nott.mybatis.sql.builder.ComplexityWrapper;
 import org.nott.mybatis.sql.builder.DeleteSqlConditionBuilder;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
 import org.nott.mybatis.sql.enums.LikeMode;
-import org.nott.mybatis.sql.model.InLike;
-import org.nott.mybatis.sql.model.InSelect;
-import org.nott.mybatis.sql.model.Where;
+import org.nott.mybatis.sql.enums.SqlOperator;
+import org.nott.mybatis.sql.model.*;
 import org.nott.web.entity.User;
+import org.nott.web.entity.UserRelation;
 import org.nott.web.mapper.UserMapper;
 import org.nott.web.service.UserService;
+import org.nott.web.vo.UserRelationVo;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -241,6 +243,17 @@ public class MybatisTestClass {
     public void testIssues26(){
         List<User> users = userMapper.selectListByCondition(QuerySqlConditionBuilder.build().notNull("id"));
         Assert.isTrue(users.size() == 3,"");
+    }
+
+    @Test
+    public void testIssues27() {
+        List<UserRelationVo> result = ComplexityWrapper.build(User.class, "t1")
+                .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
+                .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
+                .colums(Colum.select("T1.id","userId"))
+                .condition(Where.eq("t1.id", ""))
+                .execType(UserRelationVo.class);
+        Assert.noNullElements(result,"");
     }
 
     @Test

@@ -16,9 +16,8 @@ public class JoinTable extends Table{
 
     private JoinTableMode joinMode;
 
-    public JoinTable(String name, String alias, SqlConditions joinCondition, JoinTableMode joinMode) {
+    public JoinTable(String name, String alias, JoinTableMode joinMode) {
         super(name, alias);
-        this.joinCondition = joinCondition;
         this.joinMode = joinMode;
     }
 }

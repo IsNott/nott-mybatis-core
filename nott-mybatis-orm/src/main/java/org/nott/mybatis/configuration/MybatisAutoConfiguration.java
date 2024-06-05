@@ -31,8 +31,8 @@ public class MybatisAutoConfiguration {
     public SqlSessionFactoryBean getSqlSessionFactoryBean(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources(nottMybatisConfig.getMapperLocation()));
+//        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        sqlSessionFactoryBean.setMapperLocations(new ClassPathResource(nottMybatisConfig.getMapperLocation()),new ClassPathResource(nottMybatisConfig.getCommonMapperXmlLocation()));
         sqlSessionFactoryBean.setConfigLocation(new ClassPathResource(nottMybatisConfig.getMybatisConfigLocation()));
         return sqlSessionFactoryBean;
     }

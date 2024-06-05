@@ -375,4 +375,9 @@ public class SqlBuilder {
         System.out.println("Generate Delete sql:" + sql.toString());
         return sql.toString();
     }
+
+    //todo build join sql
+    public static void buildJoinQuerySql(ComplexityWrapper builder) {
+
+    }
 }
