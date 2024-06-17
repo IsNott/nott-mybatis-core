@@ -16,7 +16,6 @@ import java.util.List;
 
 public class MybatisSqlFactory {
 
-    //todo execute join table SQL
     public static <T> List<T> doExecute(Class<T> tClass, ComplexityWrapper builder) {
         List<T> result;
         SqlBuilder.buildJoinQuerySql(builder);
@@ -24,7 +23,8 @@ public class MybatisSqlFactory {
         SqlSession sqlSession = null;
         try {
             sqlSession = sqlSessionFactory.openSession();
-            List<Object> objects = sqlSession.selectList("Mapper.joinQuery");
+            // todo Generate BaseMapper join Table Query SQL Value.
+            List<Object> objects = sqlSession.selectList("BaseMapper.joinQuery");
             result = assembleResultByClass(objects,tClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -36,9 +36,9 @@ public class MybatisSqlFactory {
         return result;
     }
 
+    // TODO Transform Result List to Bean
     private static <T> List<T> assembleResultByClass(List<Object> queryResultList, Class<T> tClass) {
         return null;
     }
-
 
 }

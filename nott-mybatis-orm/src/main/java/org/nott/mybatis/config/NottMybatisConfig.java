@@ -23,6 +23,6 @@ public class NottMybatisConfig {
 
     private String mapperLocation;
 
-    private String commonMapperXmlLocation = "META-INF/mybatis/Mapper.xml";
+    private String commonMapperXmlLocation = "META-INF/mybatis/*.xml";
 
 }

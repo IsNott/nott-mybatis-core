@@ -4,17 +4,26 @@ import jakarta.annotation.Resource;
 import org.nott.datasource.DynamicDataSourceHolder;
 import org.nott.datasource.annotations.DataSource;
 import org.nott.mybatis.exception.OrmOperateException;
+import org.nott.mybatis.sql.builder.ComplexityWrapper;
 import org.nott.mybatis.sql.builder.QuerySqlConditionBuilder;
 import org.nott.mybatis.sql.builder.UpdateSqlConditionBuilder;
+import org.nott.mybatis.sql.enums.SqlOperator;
+import org.nott.mybatis.sql.model.Colum;
+import org.nott.mybatis.sql.model.Join;
+import org.nott.mybatis.sql.model.Where;
 import org.nott.web.entity.User;
+import org.nott.web.entity.UserRelation;
 import org.nott.web.mapper.UserMapper;
 import org.nott.web.service.UserService;
+import org.nott.web.vo.UserRelationVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 测试Web模块 Controller层
@@ -57,6 +66,17 @@ public class UserController {
                 .set("name","spring"));
 
         throw new OrmOperateException("test");
+    }
+
+    @RequestMapping("/test03")
+    public void test03(){
+        List<UserRelationVo> userRelationVos = ComplexityWrapper.build(User.class)
+                .alias("t1")
+                .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.userid", SqlOperator.EQ))
+                .colums(Colum.select("T1.id", "userId"))
+                .condition(Where.eq("t1.id", "410544b2-4001-4271-9855-fec4b62350b"))
+                .beanType(UserRelationVo.class);
+
     }
 
 

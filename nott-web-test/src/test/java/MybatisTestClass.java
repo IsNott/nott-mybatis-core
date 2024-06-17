@@ -249,10 +249,9 @@ public class MybatisTestClass {
     public void testIssues27() {
         List<UserRelationVo> result = ComplexityWrapper.build(User.class, "t1")
                 .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
-                .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
                 .colums(Colum.select("T1.id","userId"))
                 .condition(Where.eq("t1.id", ""))
-                .execType(UserRelationVo.class);
+                .beanType(UserRelationVo.class);
         Assert.noNullElements(result,"");
     }
 

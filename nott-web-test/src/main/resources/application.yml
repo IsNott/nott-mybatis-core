@@ -6,7 +6,7 @@ logging:
 nott:
   enable-dynamic-datasource: true
   mybatis:
-    mapper-location: classpath:mapper/**Mapper.xml
+    mapper-location: classpath:/mapper/*.xml
 
 
 

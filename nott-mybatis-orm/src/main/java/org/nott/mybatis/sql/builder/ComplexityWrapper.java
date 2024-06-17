@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.nott.mybatis.annotations.CustTableName;
+import org.nott.mybatis.exception.SqlBuilderException;
 import org.nott.mybatis.sql.MybatisSqlFactory;
 import org.nott.mybatis.sql.enums.JoinTableMode;
 import org.nott.mybatis.sql.interfaces.SqlQuery;
 import org.nott.mybatis.sql.model.Colum;
-import org.nott.mybatis.sql.model.InSelect;
 import org.nott.mybatis.sql.model.Join;
 import org.nott.mybatis.sql.model.Table;
 
@@ -29,15 +29,15 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
     private Table rootTable;
 
-    private List<Join> joinTables;
+    private List<Join> joinTables = new ArrayList<>();
 
-    private List<SqlConditions> sqlConditions;
+    private List<SqlConditions> sqlConditions = new ArrayList<>();
 
-    private HashMap<String,String> orderByMap;
+    private HashMap<String,String> orderByMap = new HashMap<>(16);
 
-    private List<Colum> groupByColums;
+    private List<Colum> groupByColums = new ArrayList<>();
 
-    private List<Colum> colums;
+    private List<Colum> colums = new ArrayList<>();
 
     private Integer rowBound;
 
@@ -50,6 +50,14 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
     public static ComplexityWrapper build(Class<?> clazz) {
         return ComplexityWrapper.build(clazz, null);
+    }
+
+    public ComplexityWrapper alias(String name){
+        if(this.rootTable == null){
+            throw new SqlBuilderException("rootTable为空");
+        }
+        this.rootTable.setAlias(name);
+        return this;
     }
 
     public static ComplexityWrapper build(Class<?> clazz, String alias) {
@@ -87,7 +95,7 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
         return this;
     }
 
-    public <T> List<T> execType(Class<T> clazz){
+    public <T> List<T> beanType(Class<T> clazz){
         return MybatisSqlFactory.doExecute(clazz,this);
     }
 
