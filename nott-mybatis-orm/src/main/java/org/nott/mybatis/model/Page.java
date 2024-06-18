@@ -22,6 +22,9 @@ public class Page<T> {
 
     private Integer size = 10;
 
+    public Page() {
+    }
+
     public Page(Integer currentPage, Integer size) {
         if (currentPage > 0) {
             this.currentPage = currentPage;

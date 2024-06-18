@@ -258,6 +258,17 @@ public class MybatisTestClass {
     }
 
     @Test
+    public void testIssues28() {
+        Page<UserRelationVo> page = ComplexityWrapper.build(User.class, "t1")
+                .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
+                .colums(Colum.select("T1.id", "userId"))
+                .condition(Where.eq("t1.id", "410544b2-4001-4271-9855-fec4b62350d"))
+                .groupBy("t1.id")
+                .page(UserRelationVo.class, 1, 10);
+        Assert.notNull(page,"");
+    }
+
+    @Test
     public void testTransaction() {
         User user1 = new User();
         user1.setId(UUID.randomUUID().toString());

@@ -6,4 +6,8 @@
         ${value}
     </select>
 
+    <select id="count" parameterType="string" resultType="long">
+        ${value}
+    </select>
+
 </mapper>

@@ -4,8 +4,10 @@ import com.google.common.base.CaseFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.nott.mybatis.annotations.CustTableName;
 import org.nott.mybatis.exception.SqlBuilderException;
+import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.MybatisSqlFactory;
 import org.nott.mybatis.sql.enums.JoinTableMode;
 import org.nott.mybatis.sql.interfaces.SqlQuery;
@@ -39,7 +41,7 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
     private List<Colum> colums = new ArrayList<>();
 
-    private Integer rowBound;
+    private RowBounds rowBound;
 
     public ComplexityWrapper() {
     }
@@ -108,8 +110,13 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
         return this;
     }
 
-    public ComplexityWrapper limit(Integer rowBound){
-        this.rowBound = rowBound;
+    public <T> Page<T> page(Class<T> pageClass, Integer currentPage, Integer size) {
+        this.rowBound = new RowBounds((currentPage - 1) * size, size);
+        return MybatisSqlFactory.doExecutePage(pageClass, this);
+    }
+
+    public ComplexityWrapper limit(Integer rowBound) {
+        this.rowBound = new RowBounds(0, rowBound);
         return this;
     }
 

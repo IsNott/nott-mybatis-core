@@ -4,6 +4,7 @@ import com.google.common.base.CaseFormat;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.session.RowBounds;
 import org.nott.mybatis.annotations.TableId;
 import org.nott.mybatis.constant.SQLConstant;
 import org.nott.mybatis.exception.SqlParseException;
@@ -389,7 +390,16 @@ public class SqlBuilder {
             buildWhereSqlStr(sb, sqlConditions);
             buildGroupBySqlStr(sb, builder.getGroupByColums());
             buildOrderBySqlStr(sb, builder.getOrderByMap());
+            builderLimitSqlStr(sb,builder.getRowBound());
             return sb.toString();
+        }
+
+        private static void builderLimitSqlStr(StringBuilder sb, RowBounds rowBound) {
+            if(rowBound != null){
+                int offset = rowBound.getOffset();
+                int limit = rowBound.getLimit();
+                sb.append(" LIMIT ").append(offset).append(",").append(limit);
+            }
         }
 
         private static void buildSelectColumSqlStr(List<Colum> sqlColum, StringBuilder sb) {
@@ -468,5 +478,10 @@ public class SqlBuilder {
             sb.append(conditions.getColum()).append(sqlOperator.getValue()).append(reassembleValue(conditions.getValue()));
         }
 
+        public static String buildCountSql(String joinQuerySql) {
+            StringBuilder sb = new StringBuilder("SELECT COUNT(1) FROM (");
+            sb.append(joinQuerySql).append(") _table");
+            return sb.toString();
+        }
     }
 }
