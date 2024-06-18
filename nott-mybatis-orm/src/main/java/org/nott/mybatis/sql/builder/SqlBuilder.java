@@ -9,19 +9,16 @@ import org.nott.mybatis.constant.SQLConstant;
 import org.nott.mybatis.exception.SqlParseException;
 import org.nott.mybatis.model.MybatisSqlBean;
 import org.nott.mybatis.model.Pk;
+import org.nott.mybatis.sql.enums.JoinTableMode;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlDDLOption;
 import org.nott.mybatis.sql.enums.SqlOperator;
-import org.nott.mybatis.sql.model.Colum;
-import org.nott.mybatis.sql.model.Order;
-import org.nott.mybatis.sql.model.UpdateCombination;
+import org.nott.mybatis.sql.model.*;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Sql构造器
@@ -140,9 +137,9 @@ public class SqlBuilder {
                     value = buildLikeAround(sqlCondition.getLikeMode(), value);
                 }
                 value = isNullValue ? null : reassembleValue(value);
-                if(isNullValue){
+                if (isNullValue) {
                     sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue());
-                }else {
+                } else {
                     sql.WHERE(sqlCondition.getColum() + sqlOperator.getValue() + value);
                 }
             }
@@ -376,8 +373,100 @@ public class SqlBuilder {
         return sql.toString();
     }
 
-    //todo build join sql
-    public static void buildJoinQuerySql(ComplexityWrapper builder) {
+    public static final class SqlStrBuilder {
+        public static String buildJoinQuerySql(ComplexityWrapper builder) {
+            List<Colum> selectColum = builder.getColums();
+            Table rootTable = builder.getRootTable();
+            String rootTableName = rootTable.getName();
+            String rootTableAlias = rootTable.getAlias();
+            List<Join> joinTables = builder.getJoinTables();
+            List<SqlConditions> sqlConditions = builder.getSqlConditions();
+            StringBuilder sb = new StringBuilder("SELECT ");
+            buildSelectColumSqlStr(selectColum, sb);
+            sb.append(" FROM ");
+            buildAsSQLStr(sb, rootTableName, rootTableAlias);
+            buildJoinTableSql(sb, joinTables);
+            buildWhereSqlStr(sb, sqlConditions);
+            buildGroupBySqlStr(sb, builder.getGroupByColums());
+            buildOrderBySqlStr(sb, builder.getOrderByMap());
+            return sb.toString();
+        }
+
+        private static void buildSelectColumSqlStr(List<Colum> sqlColum, StringBuilder sb) {
+            if (sqlColum.isEmpty()) {
+                sb.append("*");
+            } else {
+                for (Colum colum : sqlColum) {
+                    String fieldName = colum.getFieldName();
+                    String asName = colum.getAsName();
+                    buildAsSQLStr(sb, fieldName, asName);
+                }
+            }
+        }
+
+        private static void buildOrderBySqlStr(StringBuilder sb, HashMap<String, String> orderByMap) {
+            if (!CollectionUtils.isEmpty(orderByMap)) {
+                sb.append(" ORDER BY ");
+                Set<String> keySet = orderByMap.keySet();
+                Iterator<String> iterator = keySet.iterator();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    String val = orderByMap.get(key);
+                    sb.append(key).append(val);
+                    sb.append(",");
+                }
+                sb.deleteCharAt(sb.lastIndexOf(","));
+            }
+        }
+
+        private static void buildGroupBySqlStr(StringBuilder sb, List<Colum> groupByColums) {
+            if (!groupByColums.isEmpty()) {
+                sb.append(" GROUP BY ");
+                for (Colum groupByColum : groupByColums) {
+                    String fieldName = groupByColum.getFieldName();
+                    sb.append(fieldName).append(",");
+                }
+                sb.deleteCharAt(sb.lastIndexOf(","));
+            }
+        }
+
+        private static void buildWhereSqlStr(StringBuilder sb, List<SqlConditions> sqlConditions) {
+            sb.append(" WHERE ");
+            for (int i = 0; i < sqlConditions.size(); i++) {
+                SqlConditions conditions = sqlConditions.get(i);
+                buildSQLConditionStr(sb, conditions);
+                if (i > sqlConditions.size() - 1) {
+                    sb.append(" AND ");
+                }
+            }
+        }
+
+        private static void buildJoinTableSql(StringBuilder sb, List<Join> joinTables) {
+            for (Join joinTable : joinTables) {
+                JoinTableMode joinMode = joinTable.getJoinMode();
+                SqlConditions joinCondition = joinTable.getJoinCondition();
+                switch (joinMode) {
+                    case LEFT -> sb.append(" LEFT JOIN ");
+                    case RIGHT -> sb.append(" RIGHT JOIN ");
+                    case INNER_JOIN -> sb.append(" JOIN ");
+                }
+                buildAsSQLStr(sb, joinTable.getName(), joinTable.getAlias());
+                sb.append(" ON ");
+                buildSQLConditionStr(sb, joinCondition);
+            }
+        }
+
+        public static void buildAsSQLStr(StringBuilder sb, String orginName, String alias) {
+            sb.append(orginName);
+            if (StringUtils.isNotEmpty(alias)) {
+                sb.append(" AS ").append(alias);
+            }
+        }
+
+        public static void buildSQLConditionStr(StringBuilder sb, SqlConditions conditions) {
+            SqlOperator sqlOperator = conditions.getSqlOperator();
+            sb.append(conditions.getColum()).append(sqlOperator.getValue()).append(reassembleValue(conditions.getValue()));
+        }
 
     }
 }
