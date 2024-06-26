@@ -17,4 +17,7 @@
 
 
     <logger name="org.nott.web" level="info"/>
+
+    <logger name="org.nott.mybatis" level="info">
+    </logger>
 </configuration>

@@ -51,7 +51,7 @@ pom.xml引入模块(nott-mybatis-orm/dynamic-datasource)
 </dependencies>
 ```
 
-在web项目启动主方法上加入**@ComponentScan({"org.nott"})**
+在web项目启动主方法上加入注解 @ComponentScan({"org.nott"})
 
 可参考项目web模块test文件夹下的单元测试方法。
 
@@ -91,7 +91,7 @@ nott:
       poolName: nott-hikari-01
 ```
 
-使用aop支持Select、Update、Delete、Insert基础方法（selectById、selectOne）、
+支持Select、Update、Delete、Insert基础方法（selectById、selectOne）、
 单表查询、更新条件构造器
 
 使用示例：
@@ -122,33 +122,11 @@ public interface SqlQuery {
 
     SqlConditionBuilder le(String colum, Object val);
 
-    SqlConditionBuilder select(InSelect... selects);
-
-    SqlConditionBuilder like(InLike... inLike);
-
-    SqlConditionBuilder like(String colum, Object val, LikeMode likeMode);
-
-    SqlConditionBuilder or(SqlConditions... sqlConditions);
-
-    SqlConditionBuilder limit(Integer value);
-
-    SqlConditionBuilder append(String sql);
-
-    SqlConditionBuilder orderByDesc(String... colum);
-
-    SqlConditionBuilder orderByAsc(String... colum);
-
-    SqlConditionBuilder isNull(String fieldName);
-
-    SqlConditionBuilder notNull(String fieldName);
-
-    SqlConditionBuilder groupBy(String... colum);
-
-    SqlConditionBuilder having(String... sql);
+    ...
 }
 ```
 
-Update、Delete、Insert基础方法
+Update、Delete、Insert基础方法，详见CommonMapper文件
 ```
 int affectRow = userMapper.updateById(user);
 int affectRow = userMapper.insert(user);
@@ -156,7 +134,7 @@ int affectRow = userMapper.deleteById("123435345");
 int affectRow = userMapper.deleteByIds(Arrays.asList("123435345"));
 ```
 
-Service封装mapper基础方法、分页方法，详细见CommonService文件
+Service封装mapper基础方法、分页方法，详见CommonService文件
 ```
 ...
 Page<T> page(Page<T> page);
@@ -214,7 +192,26 @@ public void test(){
 ```
 
 ## 迭代
-待增加：别名查询、多表联表查询
+联表查询构造器，Mybatis mapper执行传入SqlBuilder组装的SQL语句并，详见META-INF/mybatis/Mapper.xml文件、ComplexityWrapper类。
+```java
+        // 返回特定对象列表
+        List<UserRelationVo> result = ComplexityWrapper.build(User.class, "t1")
+        .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
+        .colums(Colum.select("T1.id","userId"))
+        .condition(Where.eq("t1.id", "410544b2-4001-4271-9855-fec4b62350d"))
+        .orderByAsc("t1.id")
+        .groupBy("t1.id")
+        .beanType(UserRelationVo.class);
+
+        // 返回分页对象
+        Page<UserRelationVo> page = ComplexityWrapper.build(User.class, "t1")
+        .leftJoin(UserRelation.class, "t2", Join.on("t1.id", "t2.user_id", SqlOperator.EQ))
+        .colums(Colum.select("T1.id", "userId"))
+        .condition(Where.eq("t1.id", "410544b2-4001-4271-9855-fec4b62350d"))
+        .groupBy("t1.id")
+        .page(UserRelationVo.class, 1, 10);
+```
+
 
 ## 参考文档
 mybatis中文文档：https://mybatis.net.cn/getting-started.html
