@@ -43,6 +43,8 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
     private RowBounds rowBound;
 
+    private String lastSql;
+
     public ComplexityWrapper() {
     }
 
@@ -89,6 +91,11 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
     public ComplexityWrapper orderByDesc(String field){
         this.orderByMap.put(field," DESC ");
+        return this;
+    }
+
+    public ComplexityWrapper lastSql(String custSql){
+        this.lastSql = custSql;
         return this;
     }
 

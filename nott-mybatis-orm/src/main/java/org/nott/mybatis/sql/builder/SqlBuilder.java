@@ -390,11 +390,18 @@ public class SqlBuilder {
             buildWhereSqlStr(sb, sqlConditions);
             buildGroupBySqlStr(sb, builder.getGroupByColums());
             buildOrderBySqlStr(sb, builder.getOrderByMap());
-            builderLimitSqlStr(sb,builder.getRowBound());
+            buildLimitSqlStr(sb,builder.getRowBound());
+            buildLastSqlStr(sb,builder.getLastSql());
             return sb.toString();
         }
 
-        private static void builderLimitSqlStr(StringBuilder sb, RowBounds rowBound) {
+        private static void buildLastSqlStr(StringBuilder sb, String lastSql) {
+            if(lastSql != null &&  !"".equals(lastSql)){
+                sb.append(" " + lastSql);
+            }
+        }
+
+        private static void buildLimitSqlStr(StringBuilder sb, RowBounds rowBound) {
             if(rowBound != null){
                 int offset = rowBound.getOffset();
                 int limit = rowBound.getLimit();
