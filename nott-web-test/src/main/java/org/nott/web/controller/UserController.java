@@ -79,5 +79,12 @@ public class UserController {
 
     }
 
-
+//    @RequestMapping("/test04")
+//    public void test04() {
+//        ComplexityWrapper.build(User.class, "t1")
+//                .leftJoin(UserRelation.class, "t2", Join.on("t1", User::getId, UserRelation::getIds))
+//                .condition(Where.eq("t1", User::getId, "410544b2-4001-4271-9855-fec4b62350b"))
+//                .beanType(UserRelationVo.class);
+//
+//    }
 }

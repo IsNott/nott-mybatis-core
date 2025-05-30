@@ -417,6 +417,10 @@ public class SqlBuilder {
                     String fieldName = colum.getFieldName();
                     String asName = colum.getAsName();
                     buildAsSQLStr(sb, fieldName, asName);
+                    sb.append(",");
+                }
+                if (sb.lastIndexOf(",") > 0) {
+                    sb.deleteCharAt(sb.lastIndexOf(","));
                 }
             }
         }

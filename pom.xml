@@ -124,6 +124,18 @@
                 <version>${log4j-api.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-jcl</artifactId>
+                <version>${log4j-api.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
             <dependency>
                 <groupId>org.springframework</groupId>

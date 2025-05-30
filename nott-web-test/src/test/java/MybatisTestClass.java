@@ -282,6 +282,17 @@ public class MybatisTestClass {
     }
 
     @Test
+    public void testIssues30() {
+        List<UserRelationVo> userRelationVos = ComplexityWrapper.build(User.class, "t1")
+                .leftJoin(UserRelation.class, "t2", Join.on("t1", User::getId, "t2", UserRelation::getUserId))
+                .condition(Where.eq("t1", User::getId, "410544b2-4001-4271-9855-fec4b62350b"))
+                .colums(Colum.select("t1", User::getId),
+                        Colum.select("t2", UserRelation::getRelationContent, "relationContent"))
+                .beanType(UserRelationVo.class);
+        Assert.notNull(userRelationVos, "");
+    }
+
+    @Test
     public void testTransaction() {
         User user1 = new User();
         user1.setId(UUID.randomUUID().toString());

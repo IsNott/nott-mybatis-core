@@ -16,8 +16,13 @@
     </appender>
 
 
-    <logger name="org.nott.web" level="info"/>
+<!--    <logger name="org.nott.web" level="info"/>-->
 
-    <logger name="org.nott.mybatis" level="info">
+    <logger name="org.nott.mybatis.mapper.NottMapper" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.apache.ibatis" level="debug">
+        <appender-ref ref="STDOUT" />
     </logger>
 </configuration>

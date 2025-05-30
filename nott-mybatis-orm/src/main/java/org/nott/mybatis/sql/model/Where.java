@@ -3,6 +3,8 @@ package org.nott.mybatis.sql.model;
 import org.nott.mybatis.sql.builder.SqlConditions;
 import org.nott.mybatis.sql.enums.LikeMode;
 import org.nott.mybatis.sql.enums.SqlOperator;
+import org.nott.mybatis.sql.interfaces.SFunction;
+import org.nott.mybatis.support.aop.utils.BaseUtils;
 
 import java.util.List;
 
@@ -49,6 +51,10 @@ public class Where {
 
     public static SqlConditions notNull(String field) {
         return new SqlConditions(field, SqlOperator.IS_NOT_NULL);
+    }
+
+    public static <T,R> SqlConditions eq(String alias, SFunction<T,R> function, Object value) {
+        return new SqlConditions(BaseUtils.getColumName(alias, function), value, SqlOperator.EQ);
     }
 
 

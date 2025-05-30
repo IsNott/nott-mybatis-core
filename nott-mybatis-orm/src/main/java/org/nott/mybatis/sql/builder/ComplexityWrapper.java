@@ -1,11 +1,8 @@
 package org.nott.mybatis.sql.builder;
 
-import com.google.common.base.CaseFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.nott.mybatis.annotations.CustTableName;
 import org.nott.mybatis.exception.SqlBuilderException;
 import org.nott.mybatis.model.Page;
 import org.nott.mybatis.sql.MybatisSqlFactory;
@@ -14,6 +11,7 @@ import org.nott.mybatis.sql.interfaces.SqlQuery;
 import org.nott.mybatis.sql.model.Colum;
 import org.nott.mybatis.sql.model.Join;
 import org.nott.mybatis.sql.model.Table;
+import org.nott.mybatis.support.aop.utils.BaseUtils;
 
 import java.util.*;
 
@@ -66,7 +64,7 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
     public static ComplexityWrapper build(Class<?> clazz, String alias) {
         ComplexityWrapper builder = new ComplexityWrapper();
-        Table table = new Table(findTableNameByClass(clazz),alias);
+        Table table = new Table(BaseUtils.findTableNameByClass(clazz),alias);
         builder.setRootTable(table);
         return builder;
     }
@@ -134,27 +132,12 @@ public class ComplexityWrapper extends QuerySqlConditionBuilder implements SqlQu
 
 
     private ComplexityWrapper joinBase(Class<?> clazz, String alias, JoinTableMode mode, Join join) {
-        join.setName(findTableNameByClass(clazz));
+        join.setName(BaseUtils.findTableNameByClass(clazz));
         join.setAlias(alias);
         join.setJoinMode(mode);
         joinTables.add(join);
         return this;
     }
-
-    private static String findTableNameByClass(Class<?> clazz) {
-        String tableName;
-        if (clazz.isAnnotationPresent(CustTableName.class)) {
-            tableName = (StringUtils.isNotEmpty(clazz.getDeclaredAnnotation(CustTableName.class).name()) ?
-                    clazz.getDeclaredAnnotation(CustTableName.class).name() : clazz.getDeclaredAnnotation(CustTableName.class).value());
-        } else {
-            tableName = (CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, clazz.getSimpleName()));
-        }
-        Objects.requireNonNull(tableName);
-        return tableName;
-    }
-
-
-
 
 
 }
